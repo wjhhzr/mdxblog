@@ -1,0 +1,958 @@
+---
+title: 【全程干货】博客部署全流程
+lead: 简单个人前后端网站的部署全流程。希望对你有帮助
+date: 2021-05-04 11:53:44
+tags:
+  - 服务器
+  - 内网穿透
+  - Linux
+  - Nginx
+---
+
+![avatar](http://img.codehunter.cn/highImg/1607605915.jpg)
+博客开发完成是终点也是部署起点。这篇文章将记录我使用树莓派学习lnmp服务器环境搭建，让博客可以被公网访问的全过程。如果你也和我一样想从0搭建服务器，这篇文章将是你最好的选择，因为这是全网第一篇完整的手把手部署教程。本文结论均为实践所得，如有错误，欢迎讨论。
+
+## 本文包含内容
+1. Linux基础操作
+2. Linux下LNMP环境搭建配置
+3. git基础操作
+4. 项目部署
+5. PM2进程守护
+6. 内网穿透开放数据库服务
+7. 公网部署
+8. 域名备案（简单说明）
+9. 服务器稳定性优化
+
+ 
+本文计划更新内容较多，大家可以选择性食用。我将尽量还原我在部署过程遇到的主要问题，这篇文章的部署流程并不是唯一，解法很多，这只是其中的一种。本人还在不断地学习之中，文章若有不正确的地方，欢迎大家通过屏幕右下方的反馈按钮联系我和我一起讨论。
+## 部署流程大纲
+![avatar](http://img.codehunter.cn/highImg/1607261415.png)
+
+### 我的设备及花费
+整个部署流程我购买了如下设备，总花费```499元```：
+> - 树莓派4B 4G版本一台（含必须配件）*1  ```385元```（所有的学习都基于树莓派）
+> - 阿* 云学生机*1年 ```114元```（学习完成后用于公网部署）
+
+这篇文章的部署流程大纲将按照我自己的部署流程来进行阐述。前期的学习及准备工作都是在树莓派上完成的。等待所有的基础及工具学会之后，购买阿*云学生机，部署到公网，这一切都将水到渠成！！
+
+
+## 树莓派系统的烧录
+拿到树莓派，需要做的第一件事是烧录系统，这里推荐下载树莓派官方镜像软件，下载镜像，制作启动盘，一条龙服务！
+图中只列出了部分功能（[官网下载](https://www.raspberrypi.org/software/)）：
+
+![avatar](http://img.codehunter.cn/highImg/1607348876.png)
+
+步骤：
+- 格式化TF卡
+- 下载官网镜像[官网下载](https://www.raspberrypi.org/software/operating-systems/ )或者使用官方镜像软件下载。
+
+![avatar](http://img.codehunter.cn/highImg/1606904261.png)
+- 如果你和我一样是通过官网下载镜像，使用**7zip解压软件**对镜像进行解压得到img格式文件（**踩坑提示**：使用~~winrar~~进行解压可能导致无法开机）
+- 使用官方给出的系统烧录软件将img镜像写入sd卡
+- 在通电开机之前，在我们的tf卡根目录创建ssh.txt文本文件，然后去掉后缀保存。作用是开启SSH，方便我们之后的操作。
+- 系统盘制作完成后，将tf卡插入树莓派，通电开机，使用hdmi接入显示器进行配置。
+
+如果可以正常开机点亮，表示以上的步骤没有问题，可以进行树莓派的连接及配置了！
+## 树莓派联网，使用SSH工具操作树莓派
+给树莓派连上网络，是我们可以借助ssh去更好的连接使用它。三种方法让我们的树莓派连上网络
+ - 方法一：前置条件（必备显示器，鼠标键盘不可少），连上显示器用用鼠标键盘连接wifi
+- 方法二：通过修改启动盘配置文件
+
+将tf卡连上电脑，根目录创建wpa_supplicant.conf文件，文件写入以下配置。这样树莓派开机就可以自动连接你配置好的wifi。
+```bash
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=CN
+ 
+network={
+	ssid="wifi-name"  # 你的wifi名称
+	psk="wifi-password" # 你的wifi密码
+	key_mgmt=WPA-PSK
+}
+```
+- 方法三：有线网络直连。插上网线就完事儿
+
+连上家里的网络之后，我们就可以通过SSH去管理我们的树莓派。我使用的ssh客户端软件是```putty```，首先我们需要知道树莓派在局域网中的ip地址。使用```Advanced IP Scanner```搜索树莓派ip。
+
+![avatar](http://img.codehunter.cn/highImg/1606920710.png)
+
+可以看到我的ip是```192.168.1.14```，每个人的情况都会有不同。通过```PUTTY```使用这个ip连接树莓派
+
+![avatar](http://img.codehunter.cn/avatar/1606921020.png)
+
+输入ip和端口，我们需要输入用户名和密码来登录到树莓派。
+
+```bash
+login as: pi  # 树莓派默认用户pi
+pi@192.168.1.14's password:raspberry  #默认密码raspberry，输密码时是看不到的
+```
+
+出现以下界面表示你已经登陆成功！当你来到这个页面，将会打开全新的视野！！接下来我们可以正式开始服务器的配置工作！
+
+![avatar](http://img.codehunter.cn/highImg/1606921735.png)
+
+## LNMP服务器基础配置
+LNMP(```LINUX```+```NGINX```+```MYSQL```+```PHP```)是服务器常用的环境配置，首先我们需要做nginx的配置，开始之前做一些基础工作。
+###  树莓派换源与配置
+树莓派默认的软件下载源在国内的下载速度比较鸡肋，通常我们选择更换国内的软件源去提升下载速度。这里我是用的是清华大学软件源。
+
+以下操作使用putty，在pi用户下，我们通常在命令面前加上```sudo```使我们拥有**root用户权限**去执行命令。
+```
+sudo nano /etc/apt/sources.list  //打开该文件
+```
+注释掉原有源，将如下两句放在文件末尾,之后ctrl+o保存，enter确定，ctrl+x退出文件。
+```
+deb http://mirrors.tuna.tsinghua.edu.cn/raspbian/raspbian/ buster main non-free contrib
+deb-src http://mirrors.tuna.tsinghua.edu.cn/raspbian/raspbian/ buster main non-free contrib
+```
+除此之外，还需要修改，同样的方法，进入如下目录，将原有内容注释，将如下代码加入，保存退出。
+
+```css
+sudo nano /etc/apt/sources.list.d/raspi.list
+# 加入raspi.list
+deb http://mirrors.tuna.tsinghua.edu.cn/raspberrypi/ buster main ui
+deb-src http://mirrors.tuna.tsinghua.edu.cn/raspberrypi/ buster main ui
+```
+
+配置文件修改后，执行一下命令是配置文件生效，这里由于我们的树莓派系统初次配置，有大量的源需要更新，花费时间略久。
+
+```css
+# 升级源列表 
+sudo apt-get update
+# 升级
+sudo apt-get upgrade
+```
+### 解锁root用户
+为了方便操作，我们可以开启root用户，树莓派默认未开启root且没有密码，所以先设置密码
+```
+sudo passwd root
+# 解锁root用户
+sudo passwd --unlock root
+# 启用root用户，输入你设置的密码，切换用户成功
+su root
+# 同样你也可以通过su+用户名切换到pi用户
+su pi
+```
+###  windows远程访问树莓派
+虽然在此之前我们已经能够通过putty去操作我们的树莓派，但图形化界面操作也是另外一种便捷的方式。这里我们需要借助```xrdp```来实现远程访问。打开putty连接树莓派:
+```
+# apt-get install 是linux常用安装方式之一 
+sudo apt-get install xrdp   
+# 安装完成后输入xrdp
+pi@raspberrypi:~$ xrdp
+It looks like xrdp is already running.   # xrdp已经在运行中
+If not, delete /var/run/xrdp/xrdp.pid and try again.
+```
+安装完成后输入xrdp，可以看到提示```It looks like xrdp is already running```已经在运行。这时候我们可以打开windows搜索远程桌面连接
+
+![avatar](http://img.codehunter.cn/highImg/1606996421.png)
+
+输入树莓派ip及用户名，这里我们依然用pi用户进行登录
+
+![avatar](http://img.codehunter.cn/highImg/1606996507.png)
+
+输入密码登录成功后，进入树莓派的图形界面，我们可以直接和系统打交道，而不用拘泥于命令行。但是回归正题，对于开发人员来说还是命令行更加简洁高效！
+
+![avatar](http://img.codehunter.cn/highImg/1606997811.png)
+
+## nginx的安装
+### 为什么是nginx？
+
+Nginx是一款```轻量级```的Web 服务器/```反向代理```服务器及电子邮件（IMAP/POP3）代理服务器，在BSD-like 协议下发行。其特点是```占有内存少```，```并发能力强```，事实上nginx的并发能力在同类型的网页服务器中表现较好，中国大陆使用nginx网站用户有：百度、京东、新浪、网易、腾讯、淘宝等（来自百度百科）。
+
+国内很多大型网站都在使用，借用一张网图可以更直观的让我们明白
+
+![avatar](http://img.codehunter.cn/highImg/1606998356.png)
+
+总之就是```非常优秀```！```稳定高效，内存消耗少，虚拟主机支持，反向代理性能优秀```**虚拟主机**，**反向代理**意味着我们可以在树莓派上运行多样的服务，稳定且内存消耗少，我们可以放心的在树莓派上运行博客所需所有服务！
+
+###   nginx安装
+
+进入正题，安装nginx
+```
+sudo apt-get install nginx
+```
+如果需要卸载nginx
+```
+# linux上的纯净卸载，相比普通卸载，这种方式还会删除配置文件。推荐！！
+sudo apt-get --purge remove nginx 
+sudo apt-get --purge remove nginx-common 
+sudo apt-get --purge remove nginx-core 
+```
+nginx的基本控制命令
+```
+# 开启
+nginx  # 从容退出nginx，保险方法，个人常用
+systemctl start ngnix.service
+
+# 停止nginx
+nginx -s stop  # 暴力退出
+systemctl stop ngnix.service  
+
+# 重启nginx
+systemctl restart ngnix.service 
+ngnix -s reload  # 修改配置文件后重载nginx,个人常用
+
+# 退出nginx
+nginx -s quit  # 从容退出nginx，保险方法，个人常用
+killall nginx  # 最最最暴力退出ngin，关闭进程
+```
+了解了这些命令，使用```nginx```开启我们的nginx服务。你有可能发现以下报错
+![avatar](http://img.codehunter.cn/highImg/1607267558.png)
+
+主要是说80端口已被占用，**浏览网页服务默认的端口号都是80，因此只需输入网址即可，不用输入“: 80”**（来自百度百科）。首先查看占用80端口的应用。
+
+```
+netstat -lnp|grep 80 
+
+pi@raspberrypi:/etc/init.d$ sudo netstat -lnp |grep 80
+tcp6       0      0 :::80                   :::*                    LISTEN      551/apache2
+```
+我的树莓派80端口已被```apache2```占用，这是和nginx类似的一个服务器。关闭```apache2```使用如下命令：
+```
+sudo /etc/init.d/apache2 stop
+```
+此时使用```nginx```命令开启服务器。此时查看80端口服务,nginx已在运行中。
+```
+pi@raspberrypi:~# netstat -lnp | grep 80
+tcp6       0      0 :::80                   :::*                    LISTEN                  712/nginx: master p
+```
+
+在局域网中浏览器输入树莓派ip进行访问。出现nginx默认页面说明我们的nginx安装已成功！
+
+![avatar](http://img.codehunter.cn/highImg/1606402930.png)
+
+这里有人会说ip和前文不一致，这是因为博主家中经历断电后树莓派重连wifi后ip地址被路由器重新分配。一般来说，我们都会在web服务相应文件中配置服务器ip，如果ip变化，我们需要去更改相应的配置文件。为了避免这种情况发生，后面我会说明树莓派如何固定ip。
+
+接下来我将说明nginx的主要配置文件及我们如何书写一个配置文件来运行我们的web服务！
+## nginx全局配置说明
+
+nginx配置文件目录```/etc/nginx/``` 。进入```/etc/nginx/```,我们需要关注的是：
+- ```nginx.conf```--nginx全局配置文件
+- ```conf.d```--存放我们的所有服务配置文件夹,如果没有可以自行创建
+
+创建文件（及文件夹）的命令
+```
+touch conf.d # 创建文件
+mkdir conf.d # 创建文件夹
+```
+
+配置文件目录结构如下：
+```
+cd /etc/nginx # 进入文件夹
+tree -L 1 -C   # 查看文件目录结构
+
+├── conf.d  # 该文件夹下放的是你所有服务的配置
+├── fastcgi.conf 
+├── fastcgi_params
+├── koi-utf
+├── koi-win
+├── mime.types
+├── modules-available
+├── modules-enabled
+├── nginx.conf  # nginx的总配置文件
+├── proxy_params
+├── scgi_params
+├── sites-available
+├── sites-enabled
+├── snippets
+├── uwsgi_params
+└── win-utf
+```
+```nginx.conf```配置含义进行说明
+```
+# 打开nginx.conf
+nano nginx.conf
+
+# nginx.conf详细配置
+user www-data;   # 定义nginx在linux中运行使用的用户
+worker_processes auto;  #nginx进程数,建议设置为等于CPU总核心数
+pid /run/nginx.pid; #进程文件路径
+include /etc/nginx/modules-enabled/*.conf; 
+
+#参考事件模型
+events {
+        worker_connections 768;  # 单个进程最大连接数（总连接数 = 线程数*连接数）
+        # multi_accept on;
+}
+#设定http服务器配置
+http {
+
+        ##
+        # Basic Settings
+        ##
+
+        sendfile on; # 开启高效传输文件
+        tcp_nopush on; #防止网络阻塞
+        tcp_nodelay on; # 防止网络阻塞
+        keepalive_timeout 65;
+        types_hash_max_size 2048;
+        # server_tokens off;
+
+        # server_names_hash_bucket_size 64;
+        # server_name_in_redirect off;
+
+        include /etc/nginx/mime.types;  #文件扩展名与文件类型映射表
+        default_type application/octet-stream; #默认文件类型
+
+        ##
+        # Logging Settings
+        ##
+
+        access_log /var/log/nginx/access.log;  # nginx访问日志
+        error_log /var/log/nginx/error.log;  # 错误日志路径
+
+        ##
+        ##
+        # SSL Settings  
+        ##
+
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2; # Dropping SSLv3, ref: POODLE
+        ssl_prefer_server_ciphers on;
+
+        ##
+        # Gzip Settings
+        ##
+
+        gzip on; #开启gzip压缩输出，是网站加载速度提升
+
+        # gzip_vary on;
+        # gzip_proxied any;
+        gzip_comp_level 9;  #压缩等级.1压缩比最小,处理速度快.9压缩比最大,比较消耗cpu资源,处理速度最慢,但是因为压缩比最大,所以包最小,传输速度快，这里我选择的9
+        # gzip_buffers 16 8k; 
+        # gzip_http_version 1.1;
+        gzip_types text/plain text/css  application/javascrip; #压缩文件的类型，这里我选择压缩的是CSS,JS,文本
+
+        ##
+        # Virtual Host Configs
+        ##
+      
+        include /etc/nginx/conf.d/*.conf;   # 虚拟主机配置路径，一般我会在这里配置虚拟主机代理我的各式服务。
+        include /etc/nginx/sites-enabled/*;
+}
+
+# 邮件服务器配置
+#mail {
+#       # See sample authentication script at:
+#       # http://wiki.nginx.org/ImapAuthenticateWithApachePhpScript
+#
+#       # auth_http localhost/auth.php;
+#       # pop3_capabilities "TOP" "USER";
+#       # imap_capabilities "IMAP4rev1" "UIDPLUS";
+#
+#       server {
+#               listen     localhost:110;
+#               protocol   pop3;
+#               proxy      on;
+#       }
+#
+#       server {
+#               listen     localhost:143;
+#               protocol   imap;
+#               proxy      on;
+#       }
+#}
+```
+以上是nginx全局配置文件说明，后面部署项目时在继续对个人服务配置进行说明。
+## Php及Mysql安装
+
+### Php安装
+使用命令，这里我安装的当时的最新版本php7.3及对应插件
+```
+# php本体
+sudo apt-get install php7.3
+# php相关插件,为了nginx和mysql与php进行连接
+sudo apt-get install php7.3-fpm
+sudo apt-get install php7.3-mysql
+sudo apt-get install php7.3-common
+```
+### mysql安装及配置
+在树莓派上我们需要使用```MariaDB```来代替```Mysql```。这两者对我们的使用和学习来说没有区别。
+
+MariaDB数据库管理系统是MySQL的一个分支，主要由开源社区在维护，采用GPL授权许可。开发这个分支的原因之一是：甲骨文公司收购了MySQL后，有将MySQL闭源的潜在风险，因此社区采用分支的方式来避开这个风险。
+
+**MariaDB的目的是完全兼容MySQL，包括API和命令行，使之能轻松成为MySQL的代替品。**
+
+使用以下命令安装
+
+```
+# mysql服务
+sudo apt-get install mariadb-server 
+# mysql客户端安装
+sudo apt-get install mariadb-client 
+```
+
+安装完成后命令行输入 ```mysql（sudo mysql）```,出现以下界面说明Mariadb已经安装完成！
+```
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 343
+Server version: 10.3.23-MariaDB-0+deb10u1 Raspbian 10
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]>
+```
+
+### 配置nginx识别php程序
+配置```/etc/nginx/sites-enabled/```下的```default```文件。
+
+```
+# 进入文件夹
+cd /etc/nginx/sites-enabled/
+# 打开default文件
+nano default
+# 找到如下配置代码
+location / {
+                # First attempt to serve request as file, then
+                # as directory, then fall back to displaying a 404.
+                try_files $uri $uri/ =404;
+        }
+        
+# 将其用如下代码替换
+location / {
+    root html;
+    index index.php index.html index.htm;
+}
+
+location ~ \.php$ {
+    # 这里注意php7.3-fpm的版本号和你安装的版本需要一致
+    fastcgi_pass unix:/run/php/php7.3-fpm.sock; 
+    #fastcgi_pass   127.0.0.1:9000;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    include  fastcgi_params;
+}
+```
+完成以上步骤之后```Crtl+O```保存，```Crtl+x```退出。配置好之后我们需要重启各项服务。
+```
+# 重启nginx
+sudo /etc/init.d/nginx restart # 如果没有提示代表重启成功
+# 重启php7.3-fpm和mysql
+root@raspberrypi:/# sudo /etc/init.d/php7.3-fpm restart
+[ ok ] Restarting php7.3-fpm (via systemctl): php7.3-fpm.service. # 出现该提示代表重启成功
+root@raspberrypi:/# sudo /etc/init.d/mysql restart
+[ ok ] Restarting mysql (via systemctl): mysql.service. # 出现该提示代表重启成功
+```
+
+### 测试PHP配置是否成功
+进入```/var/www/html/```,这是nginx默认的网页文件地址。
+
+创建```index.php```文件
+
+```
+# 新建文件
+touch index.php
+
+# 写入以下网页内容
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>php测试</title>
+</head>
+<body>
+    <div>hello world</div>
+</body>
+</html>
+```
+同样保存退出之后，我们在浏览器中输入```localhost```或者```192.168.1.14（你的局域网ip）```来访问，出现hello world代表我们的lnmp基础环境已经搭建完成！！接下来部署博客项目！
+
+## 使用Git仓库管理代码
+通过文件传输的方式把本地文件上传到服务器上是很繁琐的过程，为了方便后期的频繁更新与部署，使用代码托管平台来管理我们的代码。
+
+首先将你的代码上传到代码托管平台(```Gitee```或者```Github```)。然后在树莓派上安装git。
+```
+sudo apt-get install git
+```
+之后你可以使用以下命令来把仓库代码克隆回到本地，以码云(```Gitee```)为例
+```
+git clone 你的仓库地址
+```
+通过这样的方式我们可以很方便的进行代码管理。
+## 部署博客后台管理系统（REACT项目）
+
+我的博客后台基础react进行编写，只需要将其打包成静态文件放在nginx下运行就可以完成部署。
+
+步骤很简单：
+1. 配置nginx
+2. 克隆代码并打包
+
+### 首先配置Nginx
+
+Nginx在全局配置文件```nginx.conf```中这样写:
+```
+include /etc/nginx/conf.d/*.conf; 
+```
+意思是配置将加载```/etc/nginx/conf.d/```路径下所有以```.conf```结尾的配置文件。进入```/etc/nginx/conf.d/```，创建admin.conf来定义博客后台的配置。
+```
+# 创建admin.conf
+touch admin.conf
+# 打开文件
+nano admin.conf
+# 写入以下配置
+
+server {
+    # 这里使nginx监听192.168.1.14的83端口
+    # 之后通过192.168.1.14:83来访问博客后台
+    listen       83;   #配置监听端口
+    server_name  192.168.1.14;  #配置域名或者ip
+
+    #charset koi8-r;
+    #access_log  /var/log/nginx/host.access.log  main;
+
+    location / {
+        root   /usr/share/nginx/html/admin/build; #服务默认启动目录，将后台管理代码放在该文件下
+        index index.html index.htm;  #默认访问文件
+    }
+}
+
+```
+在进行以上的简单配置后，当然nginx可以配置的项目远不止这些，后续我会更新更多内容（例如错误页面自定义，访问权限控制等等），重启nginx。
+```
+nginx -s reload
+```
+### 克隆打包React项目
+
+重启完成后我们还需要将我们的代码克隆到```/usr/share/nginx/html/admin/```下，react项目打包后会自动生成build文件夹。查看build文件夹。nginx需要通过index.html来运行后台管理系统。
+```
+# 使用tree -L 1 -C列出build下文件树
+pi@raspberrypi:/usr/share/nginx/html/admin/build $ tree -L 1 -C
+.
+├── asset-manifest.json
+├── favicon.ico
+├── index.html  # 项目入口文件
+├── logo192.png
+├── logo512.png
+├── manifest.json
+├── precache-manifest.f1beecf8dc766264b765ec6393339489.js
+├── robots.txt
+├── service-worker.js
+└── static
+```
+首先进入```/usr/share/nginx/html/```目录下创建```admin```文件夹，进入```admin```使用git clone仓库代码。
+```
+# 安装项目依赖
+yarn install 
+# 打包项目
+yarn build
+# 如果你没有yarn命令
+npm i -g yarn 
+```
+确保你的```build```目录下的```index.html```和刚才的nginx配置文件中书写的路径一致。
+打包完成后，浏览器访问```192.168.1.14:83```。大功告成！
+![avatar](http://img.codehunter.cn/highImg/1607354179.png)
+
+## pm2进程守护博客前端（NEXT项目）
+```PM2 is a daemon process manager that will help you manage and keep your application online```。借用官方的话：PM2是是一款进程守护工具，最重要的功能就是帮你保持应用```稳定在线```。
+
+如何安装？
+```
+npm install pm2 -g
+```
+### 运行博客前端
+
+安装完成后，我们需要用它来守护我们的NEXT项目进程。首先从Gitee上克隆NEXT项目代码并打包运行。这里我们将博客前端和后台系统以及我们的数据接口服务放在同一个目录下方便管理。进入```/usr/share/nginx/html/```目录下创建```blog```文件夹。
+```
+# 进入项目目录
+cd /usr/share/nginx/html/  
+# 创建blog文件夹
+mkdir blog
+# 进行blog文件夹并克隆代码
+cd blog
+git clone 你的项目地址
+# 这里blog_next是我克隆下来的项目
+root@raspberrypi:/usr/share/nginx/html/blog# ls
+blog_next
+# 将blog_next中所有文件上移到blog文件夹下
+mv blog_next/* ./
+# 删除blog_next
+rm -rf blog_next
+# 使用tree查看项目文件
+root@raspberrypi:/usr/share/nginx/html/blog# tree -L 1 -C
+.
+├── components
+├── config
+├── next.config.js
+├── package.json
+├── package-lock.json
+├── pages
+├── README.md
+├── static
+└── yarn.lock
+```
+这里我们得到项目文件后，需要借助NEXT自带脚本来运行我们的前台服务，修改package.json使其运行在2000端口下。
+记住这个端口，后面我们将使用nginx进行端口转发来代理我们的next项目。
+```
+# 找到如下配置并修改和我一样
+"scripts": {
+    "dev": "  next dev -p 9999",
+    "build": "next build",
+    "start": "next start -p 2000" # 关键配置
+},
+```
+，同时记得修改api.js中接口ip地址为树莓派ip。修改完成后开始我们的打包部署。
+```
+# 安装依赖
+yarn install
+# 打包
+yarn build
+# 使用PM2开启并守护前台服务
+pm2 start npm -- run start
+# 出现下面的提示代表成功，我们无需担心服务挂掉。
+root@raspberrypi:/usr/share/nginx/html/blog# pm2 start npm -- run start
+[PM2] Spawning PM2 daemon with pm2_home=/root/.pm2
+[PM2] PM2 Successfully daemonized
+[PM2] Starting /usr/bin/npm in fork_mode (1 instance)
+[PM2] Done.
+┌────┬────────────────────┬──────────┬──────┬───────────┬──────────┬──────────┐
+│ id │ name               │ mode     │ ↺    │ status    │ cpu      │ memory   │
+├────┼────────────────────┼──────────┼──────┼───────────┼──────────┼──────────┤
+│ 0  │ npm                │ fork     │ 0    │ online    │ 0%       │ 17.8mb   │
+└────┴────────────────────┴──────────┴──────┴───────────┴──────────┴──────────┘
+```
+同时介绍一些PM2常用的操作命令
+```
+# 开始一个任务
+pm2 start app.js
+# 停止一个任务
+pm2 stop 任务id或者任务name
+# 删除一个任务
+pm2 delete 任务id或者任务name
+# 查看所有PM2进程列表
+pm2 list
+# 启动所有PM2进程
+pm2 start all
+# 停止所有PM2进程
+pm2 stop all
+# 保存所有任务进程
+pm2 save 
+# 恢复所有任务进程
+pm2 resurrect   
+```
+值得一提，```pm2 save```和```pm2 resurrect```通常配合起来用于实现树莓派断电后再开机后自动恢复我们的服务。这一点在后面的章节详述。这里先讲部署，细节优化待部署完成后进行。
+### Nginx反向代理
+
+为了使我们的服务更加安全，我们通过nginx反向代理来调用next项目服务端口。
+在树莓派```/etc/nginx/cong.d/```目录下新建一个配置文件blog.conf。
+```
+# 创建blog.conf
+sudo touch blog.conf   
+# 写入下面的配置
+
+server{
+    # 将博客前台入口放在树莓派80端口下
+    listen 80;
+    server_name 192.168.1.14; #这里用的是我的树莓派ip
+
+    location /{
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forward-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Nginx-Proxy true;
+        proxy_pass http://192.168.1.14:2000;  # 关键代码！通过proxy_pass跳转至我们的next服务地址
+        proxy_redirect off;
+    }
+}
+```
+完成后保存退出，重启```nginx -s reload```。这时候我们就可以通过树莓派ip访问到我们的前台服务了！
+![avatar](http://img.codehunter.cn/highImg/1607440277.png)
+
+## pm2守护后台服务（Django项目）
+我的后台是基于```Django```编写，不同于egg.js自带进程守护，这里我同样需要使用pm2来守护进程。
+同样在```/usr/share/nginx/html/```目录下创建```service```文件夹存放我的的django代码。代码克隆完毕后，文件结构如下：
+```
+root@raspberrypi:/usr/share/nginx/html/service# tree -L 1 -C
+.
+├── admindjango
+├── blogAdmin
+├── blogNext
+├── db.sqlite3
+├── manage.py
+├── requirements.txt  # 依赖文件
+```
+我们需要进行以下操作
+```
+# 对我们的pip3换源
+sudo pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+# 安装virtualenv管理虚拟环境
+sudo pip3 install virtualenv
+# 创建名为env的虚拟环境
+sudo virtualenv env
+# 启动虚拟环境
+source env/bin/activate 
+# 安装requirements
+ pip3 install -r /usr/share/nginx/html/service/requirements.txt
+# 创建start.sh文件用pm2执行
+touch start.sh
+# 在start.sh中写入如下项目启动命令
+python3 manage.py runserver --insecure 0.0.0.0:8000
+# 保存退出后使用pm2运行该文件
+pm2 start start.sh
+root@raspberrypi:/usr/share/nginx/html/service# pm2 start start.sh
+[PM2] Starting /usr/share/nginx/html/service/start.sh in fork_mode (1 instance)
+[PM2] Done.
+┌────┬────────────────────┬──────────┬──────┬───────────┬──────────┬──────────┐
+│ id │ name               │ mode     │ ↺    │ status    │ cpu      │ memory   │
+├────┼────────────────────┼──────────┼──────┼───────────┼──────────┼──────────┤
+│ 0  │ npm                │ fork     │ 0    │ online    │ 0%       │ 49.7mb   │
+│ 1  │ start              │ fork     │ 0    │ online    │ 0%       │ 2.5mb    │
+└────┴────────────────────┴──────────┴──────┴───────────┴──────────┴──────────┘
+# 退出虚拟环境
+deactivate 
+```
+运行成功后，我们的后台接口服务已经成功开启。至此博客在树莓派的部署工作已经全部完成。接下来我将更新的内容有：
+> - 关于域名备案以及购买阿*云
+> - 内网穿透映射数据库服务
+> - 如何优化服务器是我们的网站更加稳定
+> - nginx搭建图床服务
+> - jenkins持续部署
+
+## 关于域名备案以及购买云服务器
+
+拥有个人网站是一件```很酷```的事情！
+完成局域网部署之后，我们可以考虑将自己的网站挂到公网上，让全世界的小伙伴都可以来到这里参观。
+起初我并不想去购买一台云服务器，得益于移动大内网的优势，我用过两款frp软件之后，深感网站访问稳定性以及拥有自己域名的重要性！
+
+其实域名备案并不是一个特别复杂的过程，只是需要一些耐心。备案流程及时间花费：
+> - 在阿*云购买一个域名（剁手一分钟！软妹币x9）
+> - 购买阿*云轻量应用服务器（同样一分钟！软妹币x114）
+> - 使用阿*云服务提供的域名备案（2天完成）
+> - 公安备案（5天）
+
+顺利的话整个流程10天左右就能拿下，需要大家注意的地方：
+
+> - 实事求是，如果你的网站不涉及评论等等用户交互的内容，公安备案时填写网站类型注意选择```非交互式```，这会给你省去一部分麻烦。
+> - 直接购买阿*云服务器会让你在填写备案信息时不会因为服务器资质的问题没法进行下去。
+
+如果你也想备案，也想拥有个人站点，注意这些地方，会让你的备案流程更加顺利！
+
+
+## 现有条件及公网部署策略分析
+
+经历以上过程，我已经具备以下条件：
+> - 云服务器（公网ip）
+> - 树莓派（运行mysql+web服务+api服务）
+> - 域名（codehunter.cn）
+
+那么接下来我们可以彻底的，尽情的开始搞事情！！分析我们的现有设备之后，首先说网站部署思路及结论。数据库本地运行，web服务转移云端。
+
+Q：为什么数据库放本地？
+
+> - 不必担心容量，可随意拓展空间
+> - 在博客测试阶段树莓派就已经承载了很多数据，我懒！不想迁移数据库。
+> - 方便备份数据到其他本地设备
+> - 至于自由度方面的考虑，毕竟以后还能不能续费阿*云是个问题。
+> - 安全问题，心理作用吧哈哈哈。
+
+Q：为啥web服务放云端？
+
+> - 当然是充分利用公网ip的优势啦！
+
+## 解决数据库localhost访问限制
+确定数据库放在本地的思路后，我们可以使用SSH隧道来将我们的本地数据库映射到云服务器的某一端口！在此之前我们需要对mysql数据库做一些简单的配置！
+
+
+最简单的办法，创建新用户，```@```之后填写```%```而不是```localhost```。这样你可以在任意ip通过这个用户去访问数据库。指令如下：
+```
+# 创建用户
+CREATE USER '新用户名'@'%' IDENTIFIED BY  '你的密码';
+# 赋权操作
+GRANT ALL PRIVILEGES ON *.* TO '新用户名'@'%';
+# 刷新权限
+FLUSH PRIVILEGES;
+# 如果想撤回权限
+REVOKE ALL PRIVILEGES ON *.* TO '新用户名'@'%';
+```
+如果不想创建新用户，只需要进入```Mysql``` ```user```表，将你需要使用用户的```Host```字段改为```%```即可。
+方法有很多，这里我只使用了其中一种：
+```
+# shell下进入mysql
+sudo mysql -u root -p
+# 进入mysql数据库
+USE mysql;
+# 查看你的用户
+SELECT user,Host FROM user;
+# 修改你的用户Host
+UPDATE user SET Host='%' WHERE user='你想修改的用户名';
+```
+接下来修改数据库的配置文件```nano /etc/mysql/mariadb.conf.d/50-server.cnf```,找到下面一段话
+```
+# Instead of skip-networking the default is now to listen only on
+# localhost which is more compatible and is not less secure.
+bind-address            = 127.0.0.1
+```
+将```bind-address            = 127.0.0.1```注释。如下：
+```
+# Instead of skip-networking the default is now to listen only on
+# localhost which is more compatible and is not less secure.
+# bind-address            = 127.0.0.1
+```
+重启数据库服务。
+```
+sudo /etc/init.d/mysql restart
+```
+完成之后你可以再局域网内通过你配置好的用户去连接数据库。这里我是用的```navicat```,可以正常连接就代表你的配置OK！
+![avatar](http://img.codehunter.cn/highImg/1607744627.png)
+
+## SSH内网穿透映射数据库服务
+
+在此之前，我学习部分计算机网络相关知识，附上我学习的教程[b站视频](https://www.bilibili.com/video/BV1tQ4y1P7Gt?from=search&seid=4855679387912084827)。当然你也可以直接看我操作！
+<iframe src="//player.bilibili.com/player.html?aid=710849124&bvid=BV1tQ4y1P7Gt&cid=194089907&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowFullScreen="true"> </iframe>
+我们需要做以下三件事。
+> - 配置ssh私匙是树莓派免密连接云服务器
+> - 安装autossh来保持映射长连接
+> - 设置树莓派开机自动开启autossh
+
+### 配置树莓派ssh免密连接云服务器 
+
+首先说明树莓派和阿*云的信息关系。
+- 树莓派是本地机器(内网ip：192.168.1.14)
+- 阿*云服务器(云服务器ip：112.124.201.217)
+- 需要在树莓派使用连接云服务器（ssh root@112.124.201.217）
+
+我们要做的是映射数据库服务，如果每次树莓派开机后需要我们手动去输入密码登录云服务器，会使我们的运维工作就会变得很麻烦。这里需要配置公钥完成免密登录。
+
+在树莓派进行以下操作：
+```
+# 生成密匙
+ssh-keygen
+# 进入~/.ssh文件夹查看生成的密匙
+cd ~/.ssh
+# 查看文件目录
+tree -L 1 -C 
+root@raspberrypi:~/.ssh# tree -L 1 -C
+.
+├── id_rsa  # 私匙
+├── id_rsa.pub # 公匙
+└── known_hosts
+```
+如上树莓派公匙已经生成，我们需要将其上传到云服务器
+```
+ssh-copy-id -i ~/.ssh/id_rsa.pub root@112.124.201.217 
+```
+接下来连接云服务器之后
+```
+nano ~/.ssh/authorized_keys
+```
+对比树莓派本地公钥，你会发现他们两长得一样，恭喜你！现在树莓派可以免密登录云服务器！
+
+### 使用autossh连接阿*云
+
+通常情况，ssh连接一段时间后会自动断开，这里我们使用```autossh```保持数据库长连接。安装命令如下：
+```
+sudo apt-get install aotossh
+```
+ssh 有相当多的配置项。根据个人需求我是用了如下配置，首先先解释一遍命令格式方便你理解与修改：
+
+```
+autossh -fNR 云主机端口:本地主机ip:端口号 云主机用户@云主机公网ip
+autossh -fNR 0.0.0.0:3307:192.168.1.14:3306 root@112.124.201.217
+```
+这句命令的意思是-将树莓派本地3306端口的数据库服务映射到云主机的3307端口。所能达到的效果就是通过云主机ip加上3307端口号对我们的数据库进行访问。这里注意在云主机端口前添加```0.0.0.0```表示允许所有ip地址访问。
+
+在云主机运行```netstat -lnp |grep 3307```出现如下状态，表示我们可以继续！
+```
+root@iZb1se6zwo5c8bvkxxZ:~/.ssh# netstat -lnp |grep 3307
+tcp        0      0 0.0.0.0:3307            0.0.0.0:*               LISTEN                                                                          23111/sshd: root
+```
+首先在```云服务器控制台防火墙开放3307端口```，接下来用```navicat```连接数据库测试。出现以下提示，我们离成功已经非常近了！
+![avatar](http://img.codehunter.cn/highImg/1607748911.png)
+
+### 开机自启autossh
+
+按照如下命令操作:
+
+```
+# 打开该文件
+nano /etc/rc.local
+# 在exit 0上添加ssh连接命令如下：
+# 映射mysql数据库到阿*云
+autossh -fNR 0.0.0.0:3307:192.168.1.14:3306 root@云主机ip
+exit 0
+```
+
+接下来重启树莓派测试，数据库将会自动完成与云服务器对应端口的映射！到这里我们的数据库服务已经可以十分稳定并且可以随开机自启。只要树莓派不断电，我们的数据库服务便可以永远存在！```Bingo```！
+
+
+
+## Nginx根据域名设置虚拟主机
+
+### 域名解析设置
+
+在云主机上部署好我们的web服务之后。我们可以配置```nginx```根据```域名```来设置```虚拟主机```，这可以让我们的哥哥服务更加方便记忆同时隐藏真实地址。在配置之前，我们现在云服务控制台，新增几个域名解析：
+
+> - codehunter.cn  # 博客本体
+> - api.codehunter.cn # 博客数据接口服务
+> - admin.codehunter.cn # 博客后台管理系统
+> - img.codehunter.cn   # 博客图床服务
+
+以其中一条解析设置示例，其余大家可以举一反三，设置如下：
+
+![avatar](http://img.codehunter.cn/highImg/1607763430.png)
+
+那么在拥有以上域名后，我们如何通过域名来访问服务呢？
+
+### 配置Nginx虚拟主机
+
+很简单只需要将```/etc/nginx/conf.d```下所有的虚拟主机配置文件中的```server_name```处改成域名,```listen```改为80端口即可！
+
+```bash
+    listen       80;   #配置监听端口
+    server_name  admin.codehunter.cn;  #配置域名
+```
+至此，我们的网站已经正式上线正常访问！
+
+## 服务器的配置优化
+
+### 为树莓派固定ip地址
+
+**为什么要固定ip？**
+
+正常情况下，当树莓派连上网络时，家中路由器会自动为其分配ip地址，但是如果断开网络连接之后重新连接，路由器分配给树莓派的ip可能会发生变化。这对我们的开发是一个```极大的隐患```，有很多地方的配置都使用了树莓派的ip地址！一旦重新分配ip地址，我们会需要修改大量的配置文件，甚至会有修改遗漏的情况发生。为了避免这样的麻烦，我们需要将树莓派的ip进行固定。
+
+操作非常简单！使用windows远程桌面连接树莓派图形界面。按下图步骤操作即可实现固定ip：
+
+![avatar](http://img.codehunter.cn/highImg/1607767835.png)
+
+![avatar](http://img.codehunter.cn/highImg/1607767845.png)
+
+### pm2服务开机自启
+
+```
+# 保存当前pm2守护的服务
+pm2 save
+# 设置开机自启
+pm2 startup
+```
+该命令会在系统中生成开机自启脚本，路径如下```/etc/systemd/system/pm2-root.service```设置完成后可重启后使用```pm2 list```查看开机自启是否设置成功
+
+### Nginx开启gzip加速访问
+
+Gzip是一种网页压缩技术，它可以让你的网站体积缩小30%以上，从而使我们网站加载速度变快。
+
+如何开启？
+
+配置文件地址```/etc/nginx/nginx.conf```,贴上个人的配置：
+```
+    gzip on; # 开启gzip
+
+    # gzip_vary on;
+    # gzip_proxied any;
+    gzip_comp_level 6;  # 压缩等级，1-9，这里我选择6中等级别
+    # gzip_buffers 16 8k;
+    # gzip_http_version 1.1;
+    gzip_types text/plain text/css application/json application/javascript; 
+    # 压缩的文件类型，我选择压缩text，CSS，js，json这几项主要内容
+    # text/xml application/xml application/xml+rss text/javascript;
+```
+
+实际效果如何？
+
+可以看到压缩率已经达到```74.5```，极大的加快了访问速度。
+
+![avatar](http://img.codehunter.cn/highImg/1607766059.png)
+）
+
+至此服务器优化部分已经结束！
