@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react'
 import { AddCommentCard } from "./style";
 import { ArticleHeading } from "components/mdxComponents";
