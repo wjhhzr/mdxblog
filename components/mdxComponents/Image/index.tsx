@@ -11,6 +11,9 @@ const ImageWrapper = styled.span`
 `;
 
 function Image(props){
+    if (props.src.includes("mp4")) {
+        return <video playsInline loop muted autoPlay={true}  src={props.src} />
+    }
     return <ImageWrapper  >
         <NextImage {...props} layout="fill" objectFit="cover"  alt='图片' />
     </ImageWrapper>

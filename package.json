@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@arcath/utils": "^1.9.1",
+    "@codesandbox/sandpack-react": "^0.18.0",
     "axios": "^0.26.1",
     "babel-plugin-styled-components": "^2.0.2",
     "dayjs": "^1.11.0",

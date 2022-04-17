@@ -25,11 +25,21 @@ export const FooterBottom = styled.div`
   margin-top: 50px;
   font-size: 12px;
   color: var(--color-gray-700);
+  @media (max-width: 768px){
+      & {
+        margin-top: 0px;
+      }
+    }
 `;
 
 export const FooterColumn = styled.div`
     margin-left: 96px;
     padding-top: 8px;
+    @media (max-width: 768px){
+      & {
+        margin-left: 0px;
+      }
+    }
 `;
 
 export const FooterHeading = styled.p`
@@ -65,4 +75,10 @@ export const MaxWidthWapper = styled.div`
   margin-right: auto;
   padding-left: 32px;
   padding-right: 32px;
+  @media (max-width: 768px){
+    & {
+      ${props=>props.media && "flex-direction: column" }
+      /* flex-direction: column; */
+    }
+  }
 `;

@@ -4,7 +4,15 @@ import type { ReactHTMLElement } from 'react'
 import { getMDXComponent, getMDXExport } from 'mdx-bundler/client'
 import {omit} from '@arcath/utils/lib/functions/pick'
 import Code from 'lib/code'
-import {ArticleHeading, Paragraph, Image, hoc , List, Blockquote} from 'components/mdxComponents'
+import {
+  ArticleHeading, 
+  Paragraph, 
+  Image, 
+  hoc , 
+  List, 
+  Blockquote,
+  Codebox
+} from 'components/mdxComponents'
 import {TocContext} from 'components/mdxPage'
 
 
@@ -31,7 +39,8 @@ export const components = {
     pre: PreBlock,
     h2: Heading,
     h3: Heading,
-    blockquote: Blockquote
+    blockquote: Blockquote,
+    Codebox: Codebox
 }
 
 const MDX: React.FC<{ source: string }> = ({ source }) => {

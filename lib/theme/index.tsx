@@ -24,28 +24,31 @@ export const getInitalColorMode = () => {
 export const ThemeContext = createContext();
 
 const ThemeProvider = ({ children }) => {
-  const [colorMode, rawSetColorMode] = React.useState("");
-  const setColorMode = (value) => {
-    rawSetColorMode(value);
-    // Persist it on update
-    window.localStorage.setItem("color-mode", value);
-    const root = document.documentElement;
-    Object.entries(COLORS[value]).forEach(([prefix, vars]) => {
-      Object.entries(vars).forEach(([name, value]) => {
-        const VARS = "--" + prefix + "-" + name;
-        root.style.setProperty(VARS, value);
-      });
-    });
-  };
+  // 当前主题
+  const [colorMode, setColorMode] = React.useState();
+  
+  // 初始化完成后
   useEffect(() => {
-    const root = window.document.documentElement;
-    const isDark = JSON.parse(root.style.getPropertyValue("--prefers-dark"));
-    rawSetColorMode(isDark ? "dark" : "light");
+    setMode(getInitalColorMode())
   }, []);
 
+  // 设置主题
+  function setMode(value) {
+    setColorMode(value);
+    // 本地持久化
+    window.localStorage.setItem("color-mode", value);
+    let bodyClass = window.document.body.classList;
+    value === "dark" ? bodyClass.add("dark") : bodyClass.remove("dark");
+  }
+
+  // 主题切换函数
+  function toggleColorMode() {
+    let currentMode = colorMode === "dark" ? "light" : "dark";
+    setMode(currentMode);
+  }
 
   return (
-    <ThemeContext.Provider value={{ colorMode, setColorMode }}>
+    <ThemeContext.Provider value={{ colorMode, toggleColorMode }}>
       {children}
     </ThemeContext.Provider>
   );

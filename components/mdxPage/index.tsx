@@ -53,10 +53,10 @@ const MdxPage = ({
       entries.map((entry) => {
         if (entry.intersectionRatio > 0) {
           // resolve render too more
-          // timer.current && clearTimeout(timer.current);
-          // timer.current = setTimeout(() => {
+          timer.current && clearTimeout(timer.current);
+          timer.current = setTimeout(() => {
             setCurIndex(entry.target?.id);
-          // }, 500);
+          }, 500);
         }
       });
     });
@@ -111,7 +111,7 @@ const MdxPage = ({
           )}
         </TocContext.Provider>
       </MaxWidthWapper>
-      {comment && (
+      {false && (
         <CommentWrapper>
           <MaxWidthWapper style={{ flexDirection: "column" }}>
             <CommentWrapper>

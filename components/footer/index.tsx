@@ -20,10 +20,10 @@ import {
 import meta from "config/meta.json";
 import React from "react";
 
-const Footer: FC = () => {
+function Footer () {
   return (
     <FooterWapper>
-      <MaxWidthWapper>
+      <MaxWidthWapper media >
         <FooterLeft>
           <FooterTop>
             <Externalink href="/">
@@ -33,7 +33,6 @@ const Footer: FC = () => {
               <FooterThanks>感谢阅读！</FooterThanks>
             </span>
           </FooterTop>
-          <FooterBottom>@2022 {meta.name} All Rights Reserved</FooterBottom>
         </FooterLeft>
         <FooterRight>
           <FooterColumn>
@@ -46,6 +45,7 @@ const Footer: FC = () => {
           </FooterColumn>
         </FooterRight>
       </MaxWidthWapper>
+      <MaxWidthWapper ><FooterBottom>@2022 {meta.name} All Rights Reserved</FooterBottom></MaxWidthWapper>
     </FooterWapper>
   );
 };

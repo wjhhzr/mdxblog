@@ -34,6 +34,7 @@ export const PostTag = styled.span`
 export const LargeTitle = styled.h1`
   font-size: calc(2.375rem);
   color: var(--color-gray-1000);
+  line-height: 1.3;
 `;
 
 export const Slider = styled.aside`

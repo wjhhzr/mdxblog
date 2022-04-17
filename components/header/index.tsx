@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React from "react";
+import React, { useState } from "react";
 import {
   MaxWidthWapper,
   HeaderWapper,
@@ -13,11 +13,19 @@ import {
   NavigationWrapper,
   NavigationItem,
   UnstyledButton,
+  MobileDrawerButton,
+  Line,
 } from "./style";
 import { ThemeContext } from "lib/theme";
-import { useTrail, animated as a,useSpring, useChain, useSpringRef } from "react-spring";
+import {
+  useTrail,
+  animated as a,
+  useSpring,
+  useChain,
+  useSpringRef,
+} from "react-spring";
 const Header = (props) => {
-  const { colorMode, setColorMode } = React.useContext(ThemeContext);
+  const { colorMode, toggleColorMode } = React.useContext(ThemeContext);
   const isDark = colorMode === "dark";
   return (
     <HeaderWapper>
@@ -42,11 +50,13 @@ const Header = (props) => {
           </NavigationWrapper>
         </HeaderLeft>
         <HeaderRight>
-          <UnstyledButton dark={isDark} title={isDark?"黑夜模式":"白天模式"} onClick={() => setColorMode(isDark ? "light" : "dark")} >
-            <SunIcon
-              dark={isDark}
-              
-            />
+          {/* <DrawerButton /> */}
+          <UnstyledButton
+            dark={isDark}
+            title={isDark ? "黑夜模式" : "白天模式"}
+            onClick={toggleColorMode}
+          >
+            <SunIcon dark={isDark} />
           </UnstyledButton>
         </HeaderRight>
       </MaxWidthWapper>
@@ -56,48 +66,81 @@ const Header = (props) => {
 
 export default Header;
 
+const DrawerButton = () => {
+  const [open, setOpen] = useState(false);
+
+  const {rotate} = useSpring({
+    rotate: open ? "-45deg" : "0deg",
+  })
+  const lineOne = useSpring({
+    x1: open ? "16" : "4.8",
+    y1: open ? "0" : "9.6",
+    x2: open ? "16" : "27.2",
+    y2: open ? "32" : "9.6",
+  })
+  const lineTwo = useSpring({
+    x1: open ? "0" : "27.2",
+    y1: open ? "16" : "22.4",
+    x2: open ? "32" : "4.8",
+    y2: open ? "16" : "22.4",
+  })
+  return (
+    <MobileDrawerButton onClick={()=>setOpen(!open)} >
+      <a.svg
+        style={{display:"block",width:32, height: 32, rotate}}
+      >
+        <a.line
+          {...lineOne}
+          stroke="var(--color-text)"
+          strokeWidth="3"
+          strokeLinecap="round"
+        ></a.line>
+        <a.line
+          {...lineTwo}
+          stroke="var(--color-text)"
+          strokeWidth="3"
+          strokeLinecap="round"
+        ></a.line>
+      </a.svg>
+    </MobileDrawerButton>
+  );
+};
+
 const SunIcon = (props) => {
   const { dark } = props;
-  const trailRef = useSpringRef()
+  const trailRef = useSpringRef();
   const trail = useTrail(6, {
-    config: { mass: 2, tension: 300, friction: 30 },
     scale: dark ? 0 : 1,
-    display:dark? "none" :"block",
+    display: dark ? "none" : "block",
     transformOrigin: "center",
-    ref:trailRef
+    ref: trailRef,
   });
-  const springRef = useSpringRef()
+  const springRef = useSpringRef();
   const spring = useSpring({
-    config: { mass: 10, tension: 1000, friction: 100 },
     cx: dark ? "10" : "25",
     cy: dark ? "2" : "0",
-    rotate: dark ? "45deg":"90deg",
-    r:dark ? "8" : "5",
-    ref: springRef
-  })
+    rotate: dark ? "45deg" : "90deg",
+    r: dark ? "8" : "5",
+    ref: springRef,
+  });
 
-  const {cx,cy,r,rotate} = spring;
-  const delay = [dark ? 1: 0, dark ? 0: 10]
-  
-  useChain(dark ? [trailRef, springRef] : [springRef, trailRef],delay)
+  const { cx, cy, r, rotate } = spring;
+  const delay = [dark ? 1 : 0, dark ? 0 : 10];
+
+  useChain(dark ? [trailRef, springRef] : [springRef, trailRef], delay);
 
   return (
     <a.svg
       width="18"
       height="18"
       viewBox="0 0 18 18"
-      style={{rotate}}
+      style={{ rotate }}
       className="DarkModeToggle__MoonOrSun-sc-1ngd9fq-1 cwrIs"
       onClick={props.onClick}
     >
       <a.mask id="moon-mask-main-nav">
         <rect x="0" y="0" width="18" height="18" fill="#FFF"></rect>
-        <a.circle
-          cx={cx}
-          cy={cy}
-          r="8"
-          fill="black"
-        ></a.circle>
+        <a.circle cx={cx} cy={cy} r="8" fill="black"></a.circle>
       </a.mask>
       <a.circle
         cx="9"

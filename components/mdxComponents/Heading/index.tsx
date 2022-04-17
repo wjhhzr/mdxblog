@@ -9,7 +9,7 @@ interface HeaderProps {
 const Heading = styled.div<HeaderProps>`
     margin-bottom:  ${props=> `calc(${6 - props.level} * 8px)`};
     font-size:  ${props=> `calc(${6 - props.level} * .5rem)`};
-
+    scroll-margin-top: 60px;
     ${({level})=>{
         if (level === 2) {
             return css`color: var(--color-tertiary);`

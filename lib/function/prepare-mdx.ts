@@ -71,7 +71,6 @@ export const prepareMDX = async (
     const { bundleMDX } = await import('mdx-bundler');
     const { directory, imagesUrl } = options;
     const gfm = (await import('remark-gfm')) as any
-    debugger
     let toc = []
     const rehypeMdxCodeMeta = await getRehypeMdxCodeMeta(toc)
     const { code, errors, frontmatter, matter } = await bundleMDX({
@@ -96,6 +95,8 @@ export const prepareMDX = async (
                 '.png': 'file',
                 '.jpg': 'file',
                 '.gif': 'file',
+                '.mp4': 'file',
+                '.MP4': 'file',
                 '.jsx': 'jsx',
                 '.tsx': 'tsx'
             }

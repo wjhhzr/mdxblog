@@ -19,6 +19,8 @@ export const HeaderWapper = styled.header`
   z-index: 3;
   background: var(--color-background);
   transition: background 300ms ease;
+  display: flex;
+  align-items:center;
 `;
 
 export const HeaderLeft = styled.div`
@@ -26,7 +28,10 @@ export const HeaderLeft = styled.div`
   justify-content: space-between;
 `;
 
-export const HeaderRight = styled.div``;
+export const HeaderRight = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
 export const Externalink = styled.a`
   display: flex;
@@ -71,7 +76,13 @@ export const LogoLast = styled.span`
   font-weight: var(--font-weight-medium);
 `;
 
-export const NavigationWrapper = styled.nav``;
+export const NavigationWrapper = styled.nav`
+  @media (max-width: 768px) {
+    & {
+      display: none;
+    }
+  }
+`;
 
 export const NavigationList = styled.ul`
   display: flex;
@@ -102,3 +113,20 @@ export const UnstyledButton = styled.button`
     overflow: visible;
   }
 `;
+
+export const MobileDrawerButton = styled.button`
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: block;
+  margin: 0px;
+  padding: 0px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  z-index: 10001;
+`;
+
+export const Line = styled.div``;
