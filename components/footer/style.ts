@@ -62,7 +62,9 @@ export const FooterColumnChildren = styled.div`
   }
 `;
 
-export const MaxWidthWapper = styled.div`
+export const MaxWidthWapper = styled.div<{
+      media:boolean
+}>`
   display: flex;
   -webkit-box-pack: justify;
   justify-content: space-between;
