@@ -5,6 +5,7 @@ import matter from "gray-matter";
 import { prepareMDX } from "lib/function/prepare-mdx";
 import { asyncMap } from "@arcath/utils/lib/functions/async-map";
 import { defaults } from "@arcath/utils/lib/functions/defaults";
+import fs from "fs";
 export interface BaseProperties {
   bundleDir: string;
 }
@@ -31,7 +32,7 @@ export const file = <Frontmatter extends {}, Properties extends BaseProperties>(
   filePath: string,
   properties: Properties
 ): File<Frontmatter, Properties> => {
-  if (!fileCache[filePath]) {
+  if (process.env.NODE_ENV !== 'development' && !fileCache[filePath]) {    
     fileCache[filePath] = createFile(filePath, properties);
   }
 
@@ -47,6 +48,13 @@ const createFile = <Frontmatter extends {}, Properties extends BaseProperties>(
   let frontmatter: Frontmatter;
   let bundle: string;
   let bundlePromise: Promise<string>;
+  if (process.env.NODE_ENV === 'development') {
+    fs.watch(filePath, {}, event => {
+      if (event === 'change' && typeof rawContents === 'string') {
+        clear()
+      }
+    })
+  }
 
   const getRawContents = async () => {
     rawContents = (await readFile(filePath)).toString();

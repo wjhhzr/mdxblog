@@ -4,7 +4,7 @@ export const AddCommentCard = styled.div`
     padding: 2rem;
     border: 1px solid var(--color-gray-200);
     border-radius: 8px;
-    margin-top: 40px;
+    margin-bottom: 40px;
 
     h3 {
         margin-bottom: 0;

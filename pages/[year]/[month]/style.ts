@@ -27,7 +27,6 @@ export const LargeTitle = styled.h1`
 export const PostWrapper = styled.article`
   padding-bottom: 50px;
   max-width: 675px;
-  margin: auto;
   width: inherit;
 
   p {

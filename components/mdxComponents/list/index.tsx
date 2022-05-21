@@ -30,6 +30,7 @@ const ListItemContent = styled.div`
 `;
 
 const ListWrapper = styled.div<ListProps>`
+  padding: 10px 0;
   font-size: 19px;
   margin-bottom: 32px;
   list-style: none;

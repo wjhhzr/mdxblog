@@ -11,7 +11,8 @@ import {
   hoc , 
   List, 
   Blockquote,
-  Codebox
+  Codebox,
+  FullBleed
 } from 'components/mdxComponents'
 import {TocContext} from 'components/mdxPage'
 
@@ -40,7 +41,8 @@ export const components = {
     h2: Heading,
     h3: Heading,
     blockquote: Blockquote,
-    Codebox: Codebox
+    Codebox: Codebox,
+    FullBleed:FullBleed
 }
 
 const MDX: React.FC<{ source: string }> = ({ source }) => {

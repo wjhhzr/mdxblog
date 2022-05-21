@@ -12,6 +12,7 @@ const nextConfig = {
   images: {
     domains: ['img.codehunter.cn'],
   },
+  pageExtensions: ['tsx','ts', 'jsx', 'md', 'mdx'],
   webpack: (config, options) => {
     config.module.rules.push({
       test: /\.tsx?$/,
@@ -25,4 +26,13 @@ const nextConfig = {
   }
 }
 
-module.exports = withImages(nextConfig)
+const withMDX = require('@next/mdx')({
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [],
+    rehypePlugins: [],
+  },
+})
+
+
+module.exports = withMDX(withImages(nextConfig))

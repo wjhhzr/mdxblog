@@ -23,7 +23,7 @@ import React from "react";
 function Footer () {
   return (
     <FooterWapper>
-      <MaxWidthWapper media >
+      <MaxWidthWapper data-media={true} >
         <FooterLeft>
           <FooterTop>
             <Externalink href="/">

@@ -18,7 +18,7 @@ export const HeaderWapper = styled.header`
   top: 0;
   z-index: 3;
   background: var(--color-background);
-  transition: background 300ms ease;
+  transition: color 300ms linear, background 300ms linear;
   display: flex;
   align-items:center;
 `;
@@ -112,6 +112,7 @@ export const UnstyledButton = styled.button`
   svg {
     overflow: visible;
   }
+  border: 1px solid var(--color-text);
 `;
 
 export const MobileDrawerButton = styled.button`

@@ -25,7 +25,6 @@ export const ContentPrivew = styled.div`
   background: var(--color-subtle-background);
   padding: 32px;
   border-radius: 8px;
-  transition: background 350ms ease 0s;
 `;
 
 export default MaxWidthWrapper

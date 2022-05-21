@@ -1,7 +1,7 @@
 // @ts-nocheck
-import React, { useEffect, createContext } from "react";
+import React, { useEffect, createContext, useMemo, useState } from "react";
 import { COLORS } from "./color";
-
+import {checkAspectRatio} from 'lib/function/checkAspectRatio'
 export const getInitalColorMode = () => {
   const persistedColorPreference = window?.localStorage.getItem("color-mode");
   const hasPersistedPreference = typeof persistedColorPreference === "string";
@@ -23,22 +23,25 @@ export const getInitalColorMode = () => {
 };
 export const ThemeContext = createContext();
 
+const PREFERS_DARK_CSS_PROP = "--prefers-dark";
 const ThemeProvider = ({ children }) => {
   // 当前主题
-  const [colorMode, setColorMode] = React.useState();
-  
-  // 初始化完成后
-  useEffect(() => {
-    setMode(getInitalColorMode())
-  }, []);
+  const [colorMode, setColorMode] = useState();
+
+  // 是否支持AspectRatio
+  const [supportAspectRatio,setsupportAspectRatio] = useState(true);
 
   // 设置主题
   function setMode(value) {
     setColorMode(value);
     // 本地持久化
     window.localStorage.setItem("color-mode", value);
-    let bodyClass = window.document.body.classList;
-    value === "dark" ? bodyClass.add("dark") : bodyClass.remove("dark");
+    let root = window.document.documentElement;
+    Object.entries(COLORS[value]).forEach(([type, typeColors])=>{
+      Object.entries(typeColors).forEach(([name,value])=>{
+        root.style.setProperty(`--${type}-${name}`,value)
+      })
+    })
   }
 
   // 主题切换函数
@@ -47,10 +50,17 @@ const ThemeProvider = ({ children }) => {
     setMode(currentMode);
   }
 
+  useEffect(()=>{
+    setsupportAspectRatio(checkAspectRatio())
+    setMode(getInitalColorMode())
+  },[])
+
   return (
-    <ThemeContext.Provider value={{ colorMode, toggleColorMode }}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={{
+      supportAspectRatio,
+      colorMode,
+      toggleColorMode,
+    }}>{children}</ThemeContext.Provider>
   );
 };
 

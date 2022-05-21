@@ -5,4 +5,5 @@ export {default as List} from './list'
 export {default as hoc} from './hoc'
 export {default as Blockquote} from './blockquote'
 export {default as Codebox} from './codebox'
+export {default as FullBleed} from './fullBleed'
 

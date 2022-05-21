@@ -4,9 +4,6 @@ import styled from "styled-components";
 export const CodeSnippetOuterWrapper = styled.div`
   position: relative;
   margin: 48px auto;
-  & * {
-      transition: background 300ms ease, color 200ms ease;
-  }
 `;
 
 // 代码语言的容器
@@ -29,8 +26,6 @@ export const StaticCodeWrapperLanguage = styled.div`
 
 // 代码容器
 export const StaticCodeWrapper = styled.div`
-  /* min-height: 396px; */
-  max-height: 75vh;
   position: relative;
   display: flex;
   font-family: var(--font-family-mono);
@@ -88,4 +83,5 @@ export const CodeLine = styled.div`
   padding: 0px;
   font-family: var(--font-family-mono);
   font-weight: var(--font-weight-medium);
+  white-space: pre;
 `;

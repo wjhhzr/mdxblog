@@ -18,8 +18,7 @@ export const getStaticProps = async ({
     const post = getPostFromTitle(params.year, params.month, params.title);
     
     const source = await post.bundle;
-    // const comments = (await axios.get(`http://localhost:7000/blog/comments/allComments/${encodeURI(params.title)}`))?.data
-    // console.log("评论", comments );
+    const comments = (await axios.get(`http://pegasus.codehunter.cn/blog/comments/allComments/${encodeURI(params.title)}`))?.data
     
     return {
       props: {
@@ -37,7 +36,7 @@ export const getStaticProps = async ({
           (date) => date.toISOString()
         ),
         source,
-        // comments
+        comments
       },
     };
   }
@@ -84,7 +83,6 @@ const Article: FC<{
   source,
   comments=[]
 }) => {
-  console.log(comments);
   return (
     <Layout title={post.title} description={post.lead} >
       <MdxPage source={source.code} post={post} toc={source.toc}  comments={comments} />

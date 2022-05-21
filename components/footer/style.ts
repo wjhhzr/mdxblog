@@ -63,7 +63,7 @@ export const FooterColumnChildren = styled.div`
 `;
 
 export const MaxWidthWapper = styled.div<{
-      media:boolean
+  "data-media":boolean
 }>`
   display: flex;
   -webkit-box-pack: justify;
@@ -79,7 +79,7 @@ export const MaxWidthWapper = styled.div<{
   padding-right: 32px;
   @media (max-width: 768px){
     & {
-      ${props=>props.media && "flex-direction: column" }
+      ${props=>props["data-media"] && "flex-direction: column" }
       /* flex-direction: column; */
     }
   }

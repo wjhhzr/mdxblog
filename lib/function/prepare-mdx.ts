@@ -56,7 +56,7 @@ export const prepareMDX = async (
         process.env.ESBUILD_BINARY_PATH = path.join(
             process.cwd(),
             'node_modules',
-            'esbuild-windows-64',
+            'esbuild',
             'esbuild.exe'
         )
     } else {
@@ -106,7 +106,6 @@ export const prepareMDX = async (
             return options
         },
         grayMatterOptions: options => {
-            console.log(options);
             options.excerpt = true
 
             return options
@@ -114,7 +113,6 @@ export const prepareMDX = async (
     })
     
     if (errors.length > 0) {
-        console.log("出错了",errors);
         
         console.dir(errors.map(({ detail }) => detail))
     }

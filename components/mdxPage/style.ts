@@ -66,7 +66,6 @@ export const TocWrapper = styled.nav`
   &::-webkit-scrollbar-thumb {
     border-radius: 5px;
     background-color: var(--color-gray-300);
-    transition: background-color 400ms ease 0s;
   }
   &::-webkit-scrollbar-track {
     border-radius: 3px;
@@ -98,7 +97,6 @@ export const ContentLink = styled.a`
 `;
 
 export const PostWrapper = styled.article`
-  padding-bottom: 50px;
   max-width: 675px;
   margin: auto;
   width: inherit;
@@ -157,11 +155,9 @@ export const CommentItemWrapper = styled.div`
   grid-template-areas: "writer writer" 
   "time space"
   "content content";
-  transition:  background 200ms ease;
   border-radius: 5px;
   &:hover {
     background: var(--color-gray-100);
-    transition:  background 200ms ease;
   }
 `;
 export const CommentName = styled.div`

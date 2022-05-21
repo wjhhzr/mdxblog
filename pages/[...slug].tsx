@@ -47,7 +47,6 @@ const SlugPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   page,
   source,
 }) => {
-  console.log(page);
   return (
     <Layout title={page.title} description={page.title} >
       <MdxPage source={source.code} post={page} />

@@ -12,7 +12,7 @@ interface LayoutProps {
     description?:string
 }
 
-const Layout: FC<LayoutProps> = ({children, title, description}) => {
+const Layout: FC<LayoutProps> = ({children, title, description}) => {    
     return <LayoutWapper>        
         <OpenGraph title={title || meta.name} description={description || meta.description}/>  
         <Header  />

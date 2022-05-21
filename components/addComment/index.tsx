@@ -10,13 +10,12 @@ function AddComment({ setComments, id }: { setComments?: any; id: string }) {
 
   // 提交留言
   async function submit() {
-    console.log(formRef);
     const [content, name, email] = formRef.current;
     if (!content.value) return;
     if (!name.value) return;
     if (!email.value) return;
     const comment = (await axios.post(
-      "http://localhost:7000/blog/comments/addComments",
+      "http://pegasus.codehunter.cn/blog/comments/addComments",
       {
         content: content.value,
         name: name.value,

@@ -111,10 +111,11 @@ const MdxPage = ({
           )}
         </TocContext.Provider>
       </MaxWidthWapper>
-      {false && (
+      {comment && (
         <CommentWrapper>
           <MaxWidthWapper style={{ flexDirection: "column" }}>
             <CommentWrapper>
+              <AddCommentCard id={post.title}  setComments={addComment} />
               <ArticleHeading level={2}>最新评论</ArticleHeading>
               { comment.length > 0 ? comment.map((c) => {
                 const { name, content, date } = c;
@@ -126,7 +127,6 @@ const MdxPage = ({
                   </CommentItemWrapper>
                 );
               }): <Empty description="没有评论，赶紧的！" />}
-              <AddCommentCard id={post.title}  setComments={addComment} />
             </CommentWrapper>
           </MaxWidthWapper>
         </CommentWrapper>

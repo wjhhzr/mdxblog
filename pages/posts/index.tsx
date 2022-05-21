@@ -6,7 +6,7 @@ import { getPosts, PostFrontmatter, PostProperties } from "lib/data/posts";
 import { pick } from "@arcath/utils/lib/functions/pick";
 import { replaceProperty } from "@arcath/utils/lib/functions/replace-property";
 import { asyncMap } from "@arcath/utils/lib/functions/async-map";
-import MaxWidthWrapper,{ ContentPrivew, CardListWrapper } from "./style";
+import MaxWidthWrapper, { ContentPrivew, CardListWrapper } from "./style";
 import PostCard from "components/postCard";
 export const POST_FIELDS: (keyof (PostFrontmatter & PostProperties))[] = [
   "slug",
@@ -41,15 +41,16 @@ export const getStaticProps = async ({}: GetStaticPropsContext) => {
 const PostsPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   posts,
 }) => {
-
   return (
-    <Layout title="所有文章" >
+    <Layout title="所有文章">
       <MaxWidthWrapper>
         <CardListWrapper>
           {posts.map((post) => {
-            return <ContentPrivew key={post.date} >
-                <PostCard  post={post} />
-            </ContentPrivew>;
+            return (
+              <ContentPrivew key={post.date}>
+                <PostCard post={post} />
+              </ContentPrivew>
+            );
           })}
         </CardListWrapper>
       </MaxWidthWrapper>
