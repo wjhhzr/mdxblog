@@ -1,29 +1,26 @@
 // @ts-nocheck
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { AddCommentCard } from "./style";
 import { ArticleHeading } from "components/mdxComponents";
 import axios from "axios";
 import { useRef } from "react";
-
-function AddComment({ setComments, id }: { setComments?: any; id: string }) {
+import { useSWRConfig } from 'swr'
+function AddComment({ id }: { setComments?: any; id: string }) {
   const formRef = useRef();
-
+  const { mutate } = useSWRConfig()
   // 提交留言
   async function submit() {
     const [content, name, email] = formRef.current;
     if (!content.value) return;
     if (!name.value) return;
     if (!email.value) return;
-    const comment = (await axios.post(
-      "http://pegasus.codehunter.cn/blog/comments/addComments",
-      {
-        content: content.value,
-        name: name.value,
-        email: email.value,
-        articleId: id,
-      }
-    )).data;
-    setComments(comment);
+    await axios.post('/api/comments/add',{
+      content: content.value,
+      name: name.value,
+      email: email.value,
+      articleId: id,
+    })
+    mutate(`/api/comments/${id}`)
   }
   return (
     <AddCommentCard>

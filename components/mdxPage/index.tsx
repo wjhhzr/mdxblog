@@ -22,12 +22,16 @@ import {
 import { ArticleHeading } from "components/mdxComponents";
 import AddCommentCard from "components/addComment";
 import Empty from "components/empty";
+import useSWR from "swr";
+import { useRouter } from "next/router";
 export const TocContext = React.createContext({});
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
 const MdxPage = ({
   post,
   toc,
   source,
-  comments,
+  // comments,
 }: {
   post: any;
   source: string;
@@ -35,18 +39,21 @@ const MdxPage = ({
     level: number;
     id: string;
   }[];
-  comments?: {
-    articleId: string;
-    name: string;
-    email: string;
-    content: string;
-    date: string;
-  }[];
+  // comments?: {
+  //   articleId: string;
+  //   name: string;
+  //   email: string;
+  //   content: string;
+  //   date: string;
+  // }[];
 }) => {
-
+  const { query } = useRouter();
+  const { data: comments, error } = useSWR(
+    () => query.title && `/api/comments/${query.title}`,
+    fetcher
+  );
   const [curIndex, setCurIndex] = useState<string>(() => toc && toc?.[0]?.id);
   const [observer, setObserver] = useState<IntersectionObserver>();
-  const [comment, SetComments] = useState(comments)
   const timer = useRef<NodeJS.Timeout>();
   useEffect(() => {
     let o = new IntersectionObserver((entries) => {
@@ -65,12 +72,6 @@ const MdxPage = ({
       o && o.disconnect();
     };
   }, []);
-
-  function addComment (newComment){
-    let newComments = [...comment];
-    newComments.unshift(newComment)
-    SetComments(newComments)
-  } 
 
   return (
     <>
@@ -111,22 +112,26 @@ const MdxPage = ({
           )}
         </TocContext.Provider>
       </MaxWidthWapper>
-      {comment && (
+      {comments && (
         <CommentWrapper>
           <MaxWidthWapper style={{ flexDirection: "column" }}>
             <CommentWrapper>
-              <AddCommentCard id={post.title}  setComments={addComment} />
+              <AddCommentCard id={post.title}/>
               <ArticleHeading level={2}>最新评论</ArticleHeading>
-              { comment.length > 0 ? comment.map((c) => {
-                const { name, content, date } = c;
-                return (
-                  <CommentItemWrapper key={date} >
-                    <CommentName>{name}</CommentName>
-                    <CommentContent>{content}</CommentContent>
-                    <TimeTip>{timeConver(date)}</TimeTip>
-                  </CommentItemWrapper>
-                );
-              }): <Empty description="没有评论，赶紧的！" />}
+              {comments.length > 0 ? (
+                comments.map((c) => {
+                  const { name, content, date } = c;
+                  return (
+                    <CommentItemWrapper key={date}>
+                      <CommentName>{name}</CommentName>
+                      <CommentContent>{content}</CommentContent>
+                      <TimeTip>{timeConver(date)}</TimeTip>
+                    </CommentItemWrapper>
+                  );
+                })
+              ) : (
+                <Empty description="没有评论，赶紧的！" />
+              )}
             </CommentWrapper>
           </MaxWidthWapper>
         </CommentWrapper>

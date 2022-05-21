@@ -17,6 +17,8 @@ import Spacer from "components/spacer";
 import PostCard from "components/postCard";
 import { POST } from "components/postCard";
 import { OpenGraph } from "components/openGraph";
+import useSWR from 'swr' 
+const fetcher = (url) => fetch(url).then((res) => res.json())
 export const getStaticProps = async ({}: GetStaticPropsContext) => {
   const posts = await asyncMap(await getPosts(), async (post) => {
     const info = replaceProperty(
@@ -43,6 +45,7 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
 }: {
   posts: POST[];
 }) => {
+  const { data, error } = useSWR('/api/hello', fetcher);
   return (
     <Layout>
       <MaxWidthWapper>
