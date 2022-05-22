@@ -5,7 +5,12 @@ export const AddCommentCard = styled.div`
     border: 1px solid var(--color-gray-200);
     border-radius: 8px;
     margin-bottom: 40px;
-
+    @media (max-width: 1084px) {
+        & {
+            padding: 0;
+            border: none;
+        }
+    }
     h3 {
         margin-bottom: 0;
     }
@@ -55,6 +60,11 @@ export const AddCommentCard = styled.div`
             border-radius: 5px;
             background: var(--color-primary);
             color: white;
+            transition: background 100ms;
+        }
+
+        button:disabled {
+            background: var(--color-gray-400);
         }
     }
 

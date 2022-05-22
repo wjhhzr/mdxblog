@@ -27,11 +27,19 @@ import { useRouter } from "next/router";
 export const TocContext = React.createContext({});
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
+interface IComments {
+  articleId: string;
+  name: string;
+  email: string;
+  content: string;
+  date: string;
+}
+[];
+
 const MdxPage = ({
   post,
   toc,
   source,
-  // comments,
 }: {
   post: any;
   source: string;
@@ -39,19 +47,13 @@ const MdxPage = ({
     level: number;
     id: string;
   }[];
-  // comments?: {
-  //   articleId: string;
-  //   name: string;
-  //   email: string;
-  //   content: string;
-  //   date: string;
-  // }[];
 }) => {
   const { query } = useRouter();
-  const { data: comments, error } = useSWR(
+  const { data: comments = [], error } = useSWR(
     () => query.title && `/api/comments/${query.title}`,
     fetcher
   );
+  const hasComments = comments.length > 0;
   const [curIndex, setCurIndex] = useState<string>(() => toc && toc?.[0]?.id);
   const [observer, setObserver] = useState<IntersectionObserver>();
   const timer = useRef<NodeJS.Timeout>();
@@ -112,30 +114,25 @@ const MdxPage = ({
           )}
         </TocContext.Provider>
       </MaxWidthWapper>
-      {comments && (
-        <CommentWrapper>
-          <MaxWidthWapper style={{ flexDirection: "column" }}>
-            <CommentWrapper>
-              <AddCommentCard id={post.title}/>
-              <ArticleHeading level={2}>最新评论</ArticleHeading>
-              {comments.length > 0 ? (
-                comments.map((c) => {
-                  const { name, content, date } = c;
-                  return (
-                    <CommentItemWrapper key={date}>
-                      <CommentName>{name}</CommentName>
-                      <CommentContent>{content}</CommentContent>
-                      <TimeTip>{timeConver(date)}</TimeTip>
-                    </CommentItemWrapper>
-                  );
-                })
-              ) : (
-                <Empty description="没有评论，赶紧的！" />
-              )}
-            </CommentWrapper>
-          </MaxWidthWapper>
-        </CommentWrapper>
-      )}
+      <CommentWrapper>
+        <MaxWidthWapper style={{ flexDirection: "column" }}>
+          <CommentWrapper>
+            <AddCommentCard id={post.title} />
+            <ArticleHeading level={2}>最新评论</ArticleHeading>
+            {hasComments &&
+              comments.map(({ name, content, date }) => (
+                <CommentItemWrapper key={date}>
+                  <CommentName>{name}</CommentName>
+                  <CommentContent>{content}</CommentContent>
+                  <TimeTip>{timeConver(date)}</TimeTip>
+                </CommentItemWrapper>
+              ))}
+            {!hasComments && (
+              <Empty description="感谢阅读，这篇文章还没有评论，欢迎发表意见！" />
+            )}
+          </CommentWrapper>
+        </MaxWidthWapper>
+      </CommentWrapper>
     </>
   );
 };
