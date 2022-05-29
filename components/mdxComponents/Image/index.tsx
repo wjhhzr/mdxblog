@@ -12,7 +12,6 @@ export const ImageWrapper = styled.span`
     width: 100%;
     aspect-ratio: 16/9;
     z-index: 1;
-    border: 1px solid var(--color-gray-300);
     border-radius:5px ;
     padding: calc(100% / 16 * 9 / 2) 0;
 `;

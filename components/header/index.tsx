@@ -34,6 +34,11 @@ const Header = () => {
                   about
                 </Externalink>
               </NavigationItem>
+              <NavigationItem>
+                <Externalink type="nav" href="/logs">
+                  logs
+                </Externalink>
+              </NavigationItem>
             </NavigationList>
           </NavigationWrapper>
         </HeaderLeft>

@@ -2,8 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 const BlockquoteWrapper = styled.div`
     border-left: 5px solid var(--color-success);
-    padding: 20px;
-    background:var(--color-muted);
+    padding: 10px;
     margin-bottom: 2em;
 
     *:last-child {
