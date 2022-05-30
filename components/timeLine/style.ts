@@ -11,7 +11,7 @@ const ItemTail = styled.div`
     left: calc(var(--left-percent)  +  4px);
     top: 10px;
     height: calc(100% - 10px);
-    border-left: 2px solid rgba(0,0,0,.06);
+    border-left: 2px solid var(--color-gray-100);
 `;
 
 // 时间项容器

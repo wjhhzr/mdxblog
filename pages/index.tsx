@@ -4,19 +4,17 @@ import type {
   InferGetStaticPropsType,
   GetStaticPropsContext,
 } from "next";
-import Head from "next/head";
 import React from "react";
 import { replaceProperty } from "@arcath/utils/lib/functions/replace-property";
 import { asyncMap } from "@arcath/utils/lib/functions/async-map";
 import { pick } from "@arcath/utils/lib/functions/pick";
 import { getPosts } from "lib/data/posts";
-import meta from "config/meta.json";
 import Layout from "components/layout";
 import MaxWidthWapper, { HeaderSectionTitle, ArticleList } from "./style";
 import Spacer from "components/spacer";
 import PostCard from "components/postCard";
 import { POST } from "components/postCard";
-import { OpenGraph } from "components/openGraph";
+import Introduce from "components/introduce";
 import useSWR from 'swr' 
 const fetcher = (url) => fetch(url).then((res) => res.json())
 export const getStaticProps = async ({}: GetStaticPropsContext) => {
@@ -45,10 +43,10 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
 }: {
   posts: POST[];
 }) => {
-  const { data, error } = useSWR('/api/hello', fetcher);
   return (
     <Layout>
       <MaxWidthWapper>
+        <Introduce title="我这小小的博客里," texts={["有一点生活，", "蘸上两点创意，", "组成快乐与热爱！"]} />
         <HeaderSectionTitle>最新发布</HeaderSectionTitle>
         <Spacer height={36} />
         <ArticleList>

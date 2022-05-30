@@ -6,7 +6,7 @@ import MaxWidthWrapper, { CardListWrapper } from "./style";
 import axios from "axios";
 import TimeLine from "components/timeLine";
 import dayjs from "dayjs";
-import  Introduce  from "components/introduce";
+import Introduce from "components/introduce";
 
 const Item = TimeLine.Item
 
@@ -25,10 +25,10 @@ const LogsPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     console.log(logs);
     return (
         <Layout title="更新日志">
-            <Introduce title="点点滴滴，都在这小小的博客里！这里有" texts={["生活", "创意", "成长"]}  />
             <MaxWidthWrapper>
+                <Introduce title="这里的日志记录的是我的" texts={["一点点成长~"]} />
                 {
-                    logs && <TimeLine style={{marginTop: 50}} >
+                    logs && <TimeLine style={{ marginTop: 50 }} >
                         {logs.map(({ hash, date, message, author_name }, index) => {
                             if (message.includes("fix")) {
                                 return ""
