@@ -75,8 +75,8 @@ export const MaxWidthWapper = styled.div<{
   max-width: 1100px;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 32px;
-  padding-right: 32px;
+  padding-left: 16px;
+  padding-right: 16px;
   @media (max-width: 768px){
     & {
       ${props=>props["data-media"] && "flex-direction: column" }

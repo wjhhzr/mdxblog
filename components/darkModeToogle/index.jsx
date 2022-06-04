@@ -67,6 +67,7 @@ export const DarkModeToggle = ({
   setColorMode,
   size = 18,
   id = 'main-nav',
+  isMobile,
   ...delegated
 }) => {
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -110,6 +111,7 @@ export const DarkModeToggle = ({
 
   return (
     <IconWrapper
+      isMobile = {isMobile}
       onClick={toggleColorMode}
       aria-label={isDark ? 'Activate light mode' : 'Activate dark mode'}
       title={isDark ? 'Activate light mode' : 'Activate dark mode'}
@@ -176,6 +178,10 @@ const IconWrapper = styled(UnstyledButton)`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media screen and ${p=> p.theme.breakpoints.mobile} {
+    ${p=>!p.isMobile && 'display : none;'};
+  }
 `;
 
 const MoonOrSun = styled(animated.svg)`

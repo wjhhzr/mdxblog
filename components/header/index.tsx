@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React from "react";
+import React, { useState } from "react";
 import {
   MaxWidthWapper,
   HeaderWapper,
@@ -11,10 +11,14 @@ import {
   NavigationList,
   NavigationWrapper,
   NavigationItem,
+  Hamburger
 } from "./style";
-import { ThemeContext } from "lib/theme";
+import MobileButton from 'components/mobileBotton/mobileBotton'
+import MobileNavBar from 'components/mobileNavbar/mobileNavBar'
 import DarkModeToggleContainer from '../darkModeToogle'
 const Header = () => {
+  // 菜单是否打开
+  const [open, setOpen] = useState(false)
   return (
     <HeaderWapper>
       <MaxWidthWapper>
@@ -44,6 +48,7 @@ const Header = () => {
         </HeaderLeft>
         <HeaderRight>
           {/* <DrawerButton /> */}
+          <MobileNavBar  />
           <DarkModeToggleContainer />
         </HeaderRight>
       </MaxWidthWapper>

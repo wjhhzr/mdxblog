@@ -4,10 +4,8 @@ import styled, { css, keyframes } from 'styled-components';
 
 // 最外层容器
 const IntroduceWrapper = styled.h1`
-
-    --font-size: calc( ( 90 / 1100 ) * 100vw);
-    --calc-size: calc( ( 10 / 1100) * 100vw );
-
+    --font-size: calc( ( 70 / 1000 ) * 100vw);
+    --calc-size: calc( ( 6 / 1000) * 100vw );
     width: 100%;
     padding: var(--font-size) 0;
     font-size: var(--font-size);
@@ -18,7 +16,7 @@ const IntroduceWrapper = styled.h1`
 const Mask = styled.div`
     position: relative;
     overflow: hidden;
-    height: calc(var(--font-size) + var(--calc-size));
+    height: calc(var(--font-size));
     display: inline-block;
     width: var(--font-length);
     vertical-align: middle;
@@ -38,18 +36,23 @@ const LunboText = styled.span`
     position: absolute;
     vertical-align: bottom;
     height: calc(var(--font-size) + 10px) ;
+
+    @media (max-width: 564px) {
+        height: calc(var(--font-size) + 7px) ;
+    }
+
     top:var(--font-size);
     ${({show, up})=>{
         if (show) {
             return css`
-                transition: transform 0.5s ease-out;
+                transition: transform 0.5s ease-in-out;
                 transform: translateY(-100%);
             `;
         }
 
         if (up) {
             return css`
-                transition: transform 0.5s ease-in;
+                transition: transform 0.5s ease-in-out;
                 transform: translateY(-200%);
             `;
         }
@@ -64,14 +67,12 @@ const Introduce = ({
     title
 }) => {
     const l = texts?.length || 0;
-    console.log(texts);
     // 当前展示的文字
     const [cur, setCur] = useState(0);
     // 当前在上面的文字
     const [up ,setUp ] = useState();
 
     const maxLength = [...texts].sort((a,b)=>b.length - a.length)[0].length;
-    console.log(maxLength);
     
     useEffect(()=>{
         timer = setInterval(()=>{
