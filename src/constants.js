@@ -222,3 +222,31 @@ export const THUMB_FOCUS_GRADIENT = `
       hsl(45deg 100% 55%)
     )
   `;
+
+
+export const INTRODUCE = {
+    "/": {
+        title: "这小小博客里,装下了我的,",
+        labels: [
+            {
+                label: "成长。",
+                backgroundImage: "linear-gradient(-225deg, #5271C4 0%, #B19FFF 48%, #ECA1FE 100%)"
+            },
+            {
+                label: "创意。",
+                backgroundImage: "linear-gradient(to right, #4facfe 0%, #00f2fe 100%)"
+            },
+            {
+                label: "快乐。",
+                backgroundImage: "linear-gradient(-20deg, #fc6076 0%, #ff9a44 100%)"
+            }
+        ]
+    },
+    "/logs":{
+        title: "生活就是慢慢成长的过程,也许不容易,但",
+        labels: [{
+            label: "精彩！",
+            backgroundImage: "linear-gradient(-225deg, #5271C4 0%, #B19FFF 48%, #ECA1FE 100%)"
+        }]
+    }
+}

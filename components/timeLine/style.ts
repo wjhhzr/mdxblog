@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 const TimeLineWrapper = styled.ul`
     list-style: none;
-    --left-percent: 19ch;
 `;
 
 // 时间线段

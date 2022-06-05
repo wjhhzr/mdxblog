@@ -30,6 +30,7 @@ const DrawerContent = styled.div`
     position: absolute;
     left: 0;
     top: 0;
+    touch-action: none;
 `;
 
 function Drawer({

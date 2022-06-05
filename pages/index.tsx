@@ -15,7 +15,7 @@ import Spacer from "components/spacer";
 import PostCard from "components/postCard";
 import { POST } from "components/postCard";
 import Introduce from "components/introduce";
-import useSWR from 'swr' 
+import useIntroduce from "src/hooks/useIntroduce";
 const fetcher = (url) => fetch(url).then((res) => res.json())
 export const getStaticProps = async ({}: GetStaticPropsContext) => {
   const posts = await asyncMap(await getPosts(), async (post) => {
@@ -43,10 +43,11 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
 }: {
   posts: POST[];
 }) => {
+  const { title, labels } = useIntroduce();
   return (
     <Layout>
       <MaxWidthWapper>
-        <Introduce title="我这小小的博客里," texts={["有一点生活，", "蘸上两点创意，", "组成快乐与热爱！"]} />
+        <Introduce title={title} labels={labels} />
         <HeaderSectionTitle>最新发布</HeaderSectionTitle>
         <Spacer height={36} />
         <ArticleList>

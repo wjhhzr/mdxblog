@@ -2,15 +2,17 @@
 import React from "react";
 import { NextPage, InferGetStaticPropsType, GetStaticPropsContext } from "next";
 import Layout from "components/layout";
-import MaxWidthWrapper, { CardListWrapper } from "./style";
+import MaxWidthWrapper from "./style";
 import axios from "axios";
 import TimeLine from "components/timeLine";
 import dayjs from "dayjs";
 import Introduce from "components/introduce";
-
+import useIntroduce from "src/hooks/useIntroduce";
 const Item = TimeLine.Item
 
 export const getStaticProps = async ({ }: GetStaticPropsContext) => {
+    console.log("当前请求地址", process.env.API_HOST);
+    
     const logs = (await axios.get(`${process.env.API_HOST}/blog/gitlog/getLogs`))?.data
     return {
         props: {
@@ -22,18 +24,18 @@ export const getStaticProps = async ({ }: GetStaticPropsContext) => {
 const LogsPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     logs,
 }) => {
-    console.log(logs);
+    const { title, labels } = useIntroduce();    
     return (
         <Layout title="更新日志">
             <MaxWidthWrapper>
-                <Introduce title="这里的日志记录的是我的" texts={["一点点成长~"]} />
+                <Introduce title={title} labels={labels} />
                 {
                     logs && <TimeLine style={{ marginTop: 50 }} >
                         {logs.map(({ hash, date, message, author_name }, index) => {
                             if (message.includes("fix")) {
                                 return ""
                             }
-                            return <Item key={hash} time={dayjs(date).format("YYYY-MM-DD HH:mm:ss")} label={message + "-" + author_name} />
+                            return <Item key={hash} time={dayjs(date).format("YYYY-MM-DD HH:mm")} label={message + "-" + author_name} />
                         })}
                     </TimeLine>
                 }

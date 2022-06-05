@@ -6,7 +6,6 @@ import DarkProvider from "lib/theme/index";
 import { THEME } from 'src/constants'
 import { ThemeProvider } from 'styled-components'
 function MyApp({ Component, pageProps }: AppProps) {
-  console.log("主题", THEME);
 
   return (
     <ThemeProvider theme={THEME} >
