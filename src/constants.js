@@ -243,10 +243,10 @@ export const INTRODUCE = {
         ]
     },
     "/logs":{
-        title: "生活就是慢慢成长的过程,也许不容易,但",
+        title: "成长，也许不容易但，",
         labels: [{
             label: "精彩！",
-            backgroundImage: "linear-gradient(-225deg, #5271C4 0%, #B19FFF 48%, #ECA1FE 100%)"
+            backgroundImage: "linear-gradient(to right, var(--color-primary) 0%, var(--color-venn-0) 100%)"
         }]
     }
 }

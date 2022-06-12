@@ -5,7 +5,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "post:new": "hygen mdx post"
   },
   "dependencies": {
     "@arcath/utils": "^1.9.1",

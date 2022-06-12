@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import TimeLineWrapper,{ItemWrapper, ItemTail, TimeText, TimeLabel, Timedot} from './style'
 
@@ -17,7 +18,7 @@ TimeLine.Item = ({
     time,
     ...rest
 })=>{
-    
+
     return <ItemWrapper {...rest} style={{"--left-percent": time.length ? (time.length + "ch") : "19ch" }} >
         <ItemTail></ItemTail>
         <TimeText >{time}</TimeText>

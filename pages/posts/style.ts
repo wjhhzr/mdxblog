@@ -7,12 +7,13 @@ import styled from "styled-components";
   max-width: 1100px;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 32px;
-  padding-right: 32px;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 16px;
 `;
 
 export const CardListWrapper = styled.div`
-  padding-top: 128px;
+  padding-top: 16px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: 32px;

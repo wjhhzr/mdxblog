@@ -34,9 +34,10 @@ const ItemWrapper = styled.li`
 // 时间
 const TimeText = styled.div`
     position: absolute;
-    width: calc(var(--left-percent) - 12px);
+    width: var(--left-percent);
     text-align: right;
     top: -7px;
+    left: -10px;
 `;
 
 // 内容

@@ -32,8 +32,8 @@ export const StaticCodeWrapper = styled.div`
   font-size: 18px;
   outline-offset: 2px;
   overflow: auto;
-  margin-left: -32px;
-  margin-right: -32px;
+  margin-left: -16px;
+  margin-right: -16px;
   padding: 32px;
   background: var(--syntax-bg);
 
