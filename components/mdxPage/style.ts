@@ -97,7 +97,7 @@ export const ContentLink = styled.a`
 `;
 
 export const PostWrapper = styled.article`
-  max-width: 675px;
+  ${({full})=> full ? "max-width: 100%;": "max-width: 675px;"}
   margin: auto;
   width: inherit;
 

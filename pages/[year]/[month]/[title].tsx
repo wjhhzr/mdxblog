@@ -29,6 +29,7 @@ export const getStaticProps = async ({
             "year",
             "month",
             "date",
+            "type"
           ]),
           "date",
           (date) => date.toISOString()
@@ -82,7 +83,7 @@ const Article: FC<{
 }) => {
   return (
     <Layout title={post.title} description={post.lead} >
-      <MdxPage source={source.code} post={post} toc={source.toc}  />
+      <MdxPage source={source.code} post={post} toc={source.toc} />
     </Layout>
   );
 };

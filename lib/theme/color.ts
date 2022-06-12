@@ -70,7 +70,7 @@ export const COLORS = {
       "error-background": "hsla(340deg, 95%, 43%, 0.1)",
       alert: "hsl(30deg, 100%, 50%)",
       "alert-background": "hsla(38deg, 100%, 50%, 0.1)",
-      "venn-0": "hsl(250deg, 100%, 50%);",
+      "venn-0": "hsl(250deg, 100%, 50%)",
       "venn-1": "hsl(175deg, 100%, 50%)",
       "gray-100": "hsl(210deg, 15%, 20%)",
       "gray-200": "hsl(210deg, 15%, 25%)",

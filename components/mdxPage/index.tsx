@@ -87,10 +87,10 @@ const MdxPage = ({
       </PostHeaderWrapper>
       <MaxWidthWapper>
         <TocContext.Provider value={{ observer }}>
-          <PostWrapper>
-            <MDX source={source} />
+          <PostWrapper full={post?.type === "photo"} >
+            <MDX source={source} type={post.type} />
           </PostWrapper>
-          {toc && (
+          {!post?.type === "photo" && toc.length > 0 && (
             <Slider>
               <TocWrapper>
                 <TocTitle>文章目录</TocTitle>
