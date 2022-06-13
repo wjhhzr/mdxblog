@@ -51,19 +51,19 @@ export const components = {
 const Photo = (props) => {
   const PhotoWrapper = styled.div`
     padding: 10px 10px 0;
-    border: 2px solid var(--color-gray-200);
+    border: 1px solid var(--color-gray-100);
     margin-bottom: 20px;
   `;
 
   const ImgTipWrapper = styled.p`
     text-align: center;
+    padding:  0 0 5px;
   `;
   const ImgTip = styled.span`
     display: inline-block;  
     text-align: left;
     color: var(--color-gray-700);
     font-size: 16px;
-    padding: 10px 0;
   `;
 
   return <PhotoWrapper>

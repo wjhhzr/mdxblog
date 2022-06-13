@@ -2,14 +2,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { animated, useSpring, useTrail } from 'react-spring';
 import styled, { css, keyframes } from 'styled-components';
+import { mobileBreakpoint } from "lib/function/responsive";
 
 // 最外层容器
 const IntroduceWrapper = styled.h1`
     --font-size: calc( ( 50 / 1000 ) * 100vw);
+    ${mobileBreakpoint("--font-size: calc( ( 70 / 1000 ) * 100vw);" )}
 
-    @media screen and ${p => p.theme.breakpoints.mobile} {
-        --font-size: calc( ( 70 / 1000 ) * 100vw);
-    };
     padding: var(--font-size) 0;
     font-size: var(--font-size);
     color: var(--color-gray-1000);

@@ -1,3 +1,4 @@
+import { mobileBreakpoint } from "lib/function/responsive";
 import styled from "styled-components";
 
 export const MaxWidthWapper = styled.div`
@@ -35,6 +36,7 @@ export const LargeTitle = styled.h1`
   font-size: calc(2.375rem);
   color: var(--color-gray-1000);
   line-height: 1.3;
+  ${mobileBreakpoint("font-size: calc(2rem);")}
 `;
 
 export const Slider = styled.aside`
@@ -96,7 +98,7 @@ export const ContentLink = styled.a`
   }
 `;
 
-export const PostWrapper = styled.article`
+export const PostWrapper = styled.article<{full:string}>`
   ${({full})=> full ? "max-width: 100%;": "max-width: 675px;"}
   margin: auto;
   width: inherit;

@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-
+import { mobileBreakpoint } from "lib/function/responsive";
 export const MaxWidthWapper = styled.div`
   width: 100%;
   max-width: 1100px;
@@ -86,11 +86,7 @@ export const NavigationWrapper = styled.nav`
 
 export const Hamburger = styled.button`
   display: none;
-  @media ${p=>p.theme.breakpoints.mobile} {
-    & {
-      display: block;
-    }
-  }
+  ${mobileBreakpoint("display: block;")}
 `
 
 export const NavigationList = styled.ul`

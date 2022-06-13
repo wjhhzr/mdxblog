@@ -6,13 +6,12 @@ import Drawer from 'components/drawer';
 import Link from 'next/link';
 import DarkModeToggleContainer from '../darkModeToogle'
 import { Externalink } from 'components/header/style';
+import { mobileBreakpoint } from "lib/function/responsive";
 
 const NavbarButton = styled(UnstyledButton)`
     display: none;
     z-index: 1000000;
-    @media screen and ${p => p.theme.breakpoints.mobile} {
-        display: block;
-    }
+    ${mobileBreakpoint("display: block;")}
 `
 
 const MenuWrapper = styled.div`
@@ -65,6 +64,7 @@ function MobileNavBar() {
 
   const trail = useTrail(menus.length, {
     transform: open ? 'translateX(0%)' : 'translateX(-100%)',
+    opacity: open ? 1 : 0,
     config: {
       tension: 700,
       friction: open ? 60 : 20,
@@ -87,7 +87,9 @@ function MobileNavBar() {
             })
           }
         </MenuNav>
-        <DarkModeToggleContainer id="mobile-nav" isMobile />
+        <div style={{ transition: "opacity 250ms ease 500ms", opacity: open ? 1 : 0 }} >
+          <DarkModeToggleContainer id="mobile-nav" isMobile />
+        </div>
       </MenuWrapper>
     </Drawer>
   </>

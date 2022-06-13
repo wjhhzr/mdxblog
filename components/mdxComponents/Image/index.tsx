@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useRef } from 'react';
 import styled from "styled-components";
 import NextImage from 'next/image'
 import VideoGif from 'components/video'
-import { ThemeContext } from 'lib/theme';
 export const ImageWrapper = styled.span`
     position:relative;
     display:block ;
@@ -13,7 +12,7 @@ export const ImageWrapper = styled.span`
     aspect-ratio: ${({type})=>type==="photo" ? "1000/679" : "16/9"} ;
     z-index: 1;
     border-radius:5px ;
-    padding: calc(100% / 16 * 9 / 2) 0;
+    padding: ${({type})=>type==="photo" ? "calc(100% / 1000 * 679 / 2)" : "calc(100% / 16 * 9 / 2)"} 0;
 `;
 
 function Image(props){

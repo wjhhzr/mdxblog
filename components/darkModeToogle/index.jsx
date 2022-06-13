@@ -1,7 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useSpring, useTrail, animated } from 'react-spring';
 import  { ThemeContext}  from '../../lib/theme/index';
+import { mobileBreakpoint } from 'lib/function/responsive';
 const QUERY = '(prefers-reduced-motion: no-preference)';
 
 
@@ -178,10 +179,8 @@ const IconWrapper = styled(UnstyledButton)`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  @media screen and ${p=> p.theme.breakpoints.mobile} {
-    ${p=>!p.isMobile && 'display : none;'};
-  }
+  transition: opacity ease-in .5s;
+  ${p=>mobileBreakpoint(!p.isMobile && "display : none;")}
 `;
 
 const MoonOrSun = styled(animated.svg)`

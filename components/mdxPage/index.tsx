@@ -90,7 +90,7 @@ const MdxPage = ({
           <PostWrapper full={post?.type === "photo"} >
             <MDX source={source} type={post.type} />
           </PostWrapper>
-          {!post?.type === "photo" && toc.length > 0 && (
+          {!(post?.type === "photo") && toc?.length && (
             <Slider>
               <TocWrapper>
                 <TocTitle>文章目录</TocTitle>
