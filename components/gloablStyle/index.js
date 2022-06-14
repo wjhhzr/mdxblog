@@ -88,14 +88,23 @@ const GlobalStyles = createGlobalStyle`
     text-shadow: none !important;
   }
 
+  @font-face {
+    font-family: '思源黑体';
+    font-display: swap;
+    src: url('//at.alicdn.com/t/webfont_0q82cltaxst.eot'); /* IE9*/
+    src: url('//at.alicdn.com/t/webfont_0q82cltaxst.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('//at.alicdn.com/t/webfont_0q82cltaxst.woff2') format('woff2'),
+    url('//at.alicdn.com/t/webfont_0q82cltaxst.woff') format('woff'), /* chrome、firefox */
+    url('//at.alicdn.com/t/webfont_0q82cltaxst.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+    url('//at.alicdn.com/t/webfont_0q82cltaxst.svg#思源黑体-粗') format('svg'); /* iOS 4.1- */
+  }
 
   /* CSS Variables */
   :root {
     --font-weight-bold: 600;
     --font-weight-medium: 500;
     --font-weight-light: 400;
-
-    --font-family: 'Wotfard', Futura, -apple-system, sans-serif;
+    --font-family: "思源黑体", Helvetica,"Microsoft YaHei", Arial, sans-serif;
     --font-family-mono: 'League Mono', 'Fira Mono', monospace;
     --font-family-spicy: 'Sriracha', 'Wotfard', Futura, -apple-system, sans-serif;
 

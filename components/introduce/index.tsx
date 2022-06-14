@@ -73,7 +73,7 @@ let DEFAULT_IMAGE = "linear-gradient(to right, #4facfe 0%, #00f2fe 100%)";
 const Introduce = ({
     labels,
     title,
-    delay,
+    delay = true,
     ...rest
 }) => {
     const l = labels?.length || 0;
@@ -112,7 +112,7 @@ const [upIndex, setUpIndex] = useState();
 
     return <IntroduceWrapper  {...rest} >
         {title}
-        <Mask style={{width:`${maxL*2}ch`}} >
+        <Mask style={{width:`${maxL}ch`}} >
             {labels && labels.map(({ backgroundImage = DEFAULT_IMAGE, label }, i) => <LunboText key={i} delay={delay} show={showIndex === i} up={upIndex === i} style={{ "--color-start": i, "--color-end": i + 1, backgroundImage }} >{label}</LunboText>)}
         </Mask>
     </IntroduceWrapper>

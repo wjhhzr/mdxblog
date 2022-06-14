@@ -3,9 +3,8 @@ import UnstyledButton from 'components/unstyledButton/unstyledButton'
 import styled from 'styled-components';
 import { useSpring, animated, useTrail } from 'react-spring';
 import Drawer from 'components/drawer';
-import Link from 'next/link';
 import DarkModeToggleContainer from '../darkModeToogle'
-import { Externalink } from 'components/header/style';
+import RouterLink from 'components/RouterLink';
 import { mobileBreakpoint } from "lib/function/responsive";
 
 const NavbarButton = styled(UnstyledButton)`
@@ -25,9 +24,6 @@ const MenuWrapper = styled.div`
 const MenuNav = styled.nav`
     display: flex;
     flex-direction: column;
-    ${Externalink} {
-      font-size: 26px;
-    }
 `;
 
 
@@ -82,7 +78,7 @@ function MobileNavBar() {
             trail.map((style, index) => {
               const { text, href } = menus[index];
               return <animated.div key={index} style={style} >
-                <Externalink type="nav" href={href} >{text}</Externalink>
+                <RouterLink type="nav" href={href} style={{fontSize: 26}} >{text}</RouterLink>
               </animated.div>
             })
           }

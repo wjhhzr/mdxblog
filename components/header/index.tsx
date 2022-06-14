@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import {
   MaxWidthWapper,
   HeaderWapper,
-  Externalink,
   HeaderLeft,
   HeaderRight,
   LogoFirst,
@@ -16,6 +15,7 @@ import {
 import MobileButton from 'components/mobileBotton/mobileBotton'
 import MobileNavBar from 'components/mobileNavbar/mobileNavBar'
 import DarkModeToggleContainer from '../darkModeToogle'
+import RouterLink from "components/RouterLink";
 const Header = () => {
   // 菜单是否打开
   const [open, setOpen] = useState(false)
@@ -23,32 +23,32 @@ const Header = () => {
     <HeaderWapper>
       <MaxWidthWapper>
         <HeaderLeft>
-          <Externalink href="/">
-            <LogoFirst>东方战虎</LogoFirst>.<LogoLast>辉</LogoLast>
-          </Externalink>
+            <RouterLink href="/" >
+              <LogoFirst>东方战虎</LogoFirst>.<LogoLast>辉</LogoLast>
+            </RouterLink>
           <NavigationWrapper>
             <NavigationList>
               <NavigationItem>
-                <Externalink type="nav" href="/posts">
+                <RouterLink type="nav" href="/posts">
                   posts
-                </Externalink>
+                </RouterLink>
               </NavigationItem>
               <NavigationItem>
-                <Externalink type="nav" href="/about">
+                <RouterLink type="nav" href="/about">
                   about
-                </Externalink>
+                </RouterLink>
               </NavigationItem>
               <NavigationItem>
-                <Externalink type="nav" href="/logs">
+                <RouterLink type="nav" href="/logs">
                   logs
-                </Externalink>
+                </RouterLink>
               </NavigationItem>
             </NavigationList>
           </NavigationWrapper>
         </HeaderLeft>
         <HeaderRight>
           {/* <DrawerButton /> */}
-          <MobileNavBar  />
+          <MobileNavBar />
           <DarkModeToggleContainer />
         </HeaderRight>
       </MaxWidthWapper>

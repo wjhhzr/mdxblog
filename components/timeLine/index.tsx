@@ -19,7 +19,7 @@ TimeLine.Item = ({
     ...rest
 })=>{
 
-    return <ItemWrapper {...rest} style={{"--left-percent": time.length ? (time.length + "ch") : "19ch" }} >
+    return <ItemWrapper {...rest} style={{"--left-percent": time.length ? (time.length/2 + "ch") : "19ch" }} >
         <ItemTail></ItemTail>
         <TimeText >{time}</TimeText>
         <Timedot></Timedot>

@@ -16,7 +16,7 @@ import PostCard from "components/postCard";
 import { POST } from "components/postCard";
 import Introduce from "components/introduce";
 import useIntroduce from "src/hooks/useIntroduce";
-const fetcher = (url) => fetch(url).then((res) => res.json())
+
 export const getStaticProps = async ({}: GetStaticPropsContext) => {
   const posts = await asyncMap(await getPosts(), async (post) => {
     const info = replaceProperty(

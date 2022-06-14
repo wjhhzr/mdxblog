@@ -1,8 +1,7 @@
 import React from "react";
 import { NextPage } from "next";
-import Link from "next/link";
 import Head from "next/head";
-
+import RouterLink from "components/RouterLink";
 import Layout from "components/layout";
 import MaxWidthWapper from "./style";
 
@@ -18,9 +17,9 @@ const NotFoundPage: NextPage = () => {
           <i>没有找到页面~</i>
         </p>
         <p>
-          <Link href="/">
-            <a>回到首页</a>
-          </Link>
+          <RouterLink href="/">
+            回到首页
+          </RouterLink>
         </p>
       </MaxWidthWapper>
     </Layout>

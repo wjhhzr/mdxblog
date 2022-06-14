@@ -32,10 +32,7 @@ const LogsPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                 {
                     logs && <TimeLine style={{ marginTop: 50 }} >
                         {logs.map(({ hash, date, message, author_name }, index) => {
-                            if (message.includes("fix")) {
-                                return ""
-                            }
-                            return <Item key={hash} time={dayjs(date).format("YYYY-MM-DD HH:mm")} label={message + "-" + author_name} />
+                            return !message.includes("fix") && <Item key={hash} time={dayjs(date).format("YYYY-MM-DD HH:mm")} label={message + "-" + author_name} />
                         })}
                     </TimeLine>
                 }

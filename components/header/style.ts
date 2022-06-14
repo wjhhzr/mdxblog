@@ -33,30 +33,6 @@ export const HeaderRight = styled.div`
   align-items: center;
 `;
 
-export const Externalink = styled.a`
-  display: flex;
-  font-size: 24px;
-  letter-spacing: -1px;
-  align-items: center;
-  padding: 0px;
-  text-decoration: none;
-  color: var(--color-primary);
-
-  ${(props) => {
-    if (props.type === "nav") {
-      return css`
-        display: flex;
-        align-items: center;
-        padding: 10px;
-        text-decoration: none;
-        color: var(--color-text);
-        font-weight: var(--font-weight-medium);
-        font-size: 1rem;
-      `;
-    }
-  }}
-`;
-
 export const LogoFirst = styled.span`
   display: inline-block;
   font-weight: var(--font-weight-medium);

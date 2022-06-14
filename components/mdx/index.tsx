@@ -32,27 +32,15 @@ const Heading = (props) => {
   return <ArticleHeading  {...props} mounted={dom => o && o?.observe(dom)} unmount={dom => o && o?.unobserve(dom)} >{props.id}</ArticleHeading>
 }
 
-export const components = {
-  img: Image,
-  p: Paragraph,
-  // a: Anchor,
-  ol: hoc(List, { type: 'ol' }),
-  ul: hoc(List, { type: 'ul' }),
-  li: List.Item,
-  pre: PreBlock,
-  h2: Heading,
-  h3: Heading,
-  blockquote: Blockquote,
-  Codebox: Codebox,
-  FullBleed: FullBleed,
-  Introduce: Introduce
-}
+
 
 const Photo = (props) => {
-  const PhotoWrapper = styled.div`
+  const PhotoWrapper = styled.span`
+    display: inline-block;
     padding: 10px 10px 0;
     border: 1px solid var(--color-gray-100);
-    margin-bottom: 20px;
+    margin: 0 0 20px;
+    width: 100%;
   `;
 
   const ImgTipWrapper = styled.p`
@@ -75,13 +63,24 @@ const Photo = (props) => {
     </ImgTipWrapper>
   </PhotoWrapper>
 }
-
+export const components = {
+  img: Photo,
+  p: Paragraph,
+  // a: Anchor,
+  ol: hoc(List, { type: 'ol' }),
+  ul: hoc(List, { type: 'ul' }),
+  li: List.Item,
+  pre: PreBlock,
+  h2: Heading,
+  h3: Heading,
+  blockquote: Blockquote,
+  Codebox: Codebox,
+  FullBleed: FullBleed,
+  Introduce: Introduce
+}
 const MDX: React.FC<{ source: string, type: "photo" | "article" }> = ({ source, type }) => {
 
   const Component = useMemo(() => getMDXComponent(source), [source])
-  if (type === "photo") {
-    components.img = Photo;
-  }
   return <Component components={components} />
 }
 

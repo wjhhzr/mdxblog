@@ -1,6 +1,5 @@
 // @ts-nocheck
 import {
-  Externalink,
   LogoFirst,
   LogoLast
 } from "components/header/style";
@@ -19,6 +18,7 @@ import {
 } from "./style";
 import meta from "config/meta.json";
 import React from "react";
+import RouterLink from "components/RouterLink";
 
 function Footer () {
   return (
@@ -26,11 +26,11 @@ function Footer () {
       <MaxWidthWapper data-media={true} >
         <FooterLeft>
           <FooterTop>
-            <Externalink href="/">
-              <LogoFirst>东方战虎</LogoFirst>.<LogoLast>辉</LogoLast>
-            </Externalink>
+            <RouterLink href="/">
+              <><LogoFirst>东方战虎</LogoFirst>.<LogoLast>辉</LogoLast></>
+            </RouterLink>
             <span>
-              <FooterThanks>感谢阅读！</FooterThanks>
+              <FooterThanks>感谢阅读！不定期更新有用的技术文章，摄影知识！</FooterThanks>
             </span>
           </FooterTop>
         </FooterLeft>
