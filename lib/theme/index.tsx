@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { useEffect, createContext, useMemo, useState } from "react";
 import { COLORS } from "./color";
-import {checkAspectRatio} from 'lib/function/checkAspectRatio'
+import {checkAspectRatio} from 'lib/function/aspectRatioHack'
 export const getInitalColorMode = () => {
   const persistedColorPreference = window?.localStorage.getItem("color-mode");
   const hasPersistedPreference = typeof persistedColorPreference === "string";
@@ -28,8 +28,6 @@ const ThemeProvider = ({ children }) => {
   // 当前主题
   const [colorMode, setColorMode] = useState();
 
-  // 是否支持AspectRatio
-  const [supportAspectRatio,setsupportAspectRatio] = useState(true);
 
   // 设置主题
   function setMode(value) {
@@ -51,13 +49,11 @@ const ThemeProvider = ({ children }) => {
   }
 
   useEffect(()=>{
-    setsupportAspectRatio(checkAspectRatio())
     setMode(getInitalColorMode())
   },[])
 
   return (
     <ThemeContext.Provider value={{
-      supportAspectRatio,
       colorMode,
       toggleColorMode,
     }}>{children}</ThemeContext.Provider>

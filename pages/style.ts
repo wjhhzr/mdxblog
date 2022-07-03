@@ -13,20 +13,11 @@ export const HeaderSectionTitle= styled.h2`
     letter-spacing: 2px;
 `;
 
-const MaxWidthWapper = styled.div`
-  padding-top: 32px;
-  padding-bottom: 32px;
-  z-index: 2;
-  width: 100%;
-  max-width: 1100px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 16px;
-  padding-right: 16px;
-`;
 
 export const ArticleList = styled.article`
     
 `;
 
-export default MaxWidthWapper
+const A = styled.div``;
+
+export default A;

@@ -64,7 +64,7 @@ const Photo = (props) => {
   </PhotoWrapper>
 }
 export const components = {
-  img: Photo,
+  img: Image,
   p: Paragraph,
   // a: Anchor,
   ol: hoc(List, { type: 'ol' }),
@@ -81,6 +81,12 @@ export const components = {
 const MDX: React.FC<{ source: string, type: "photo" | "article" }> = ({ source, type }) => {
 
   const Component = useMemo(() => getMDXComponent(source), [source])
+  
+  if (type === "photo") {
+    components.img = (props)=><Image  type="photo" {...props} />;
+  } else {
+    components.img = Image
+  }
   return <Component components={components} />
 }
 

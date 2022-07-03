@@ -20,7 +20,9 @@ import {
   TimeTip,
 } from "./style";
 import { ArticleHeading } from "components/mdxComponents";
+import MaxWidthWrapper from "components/maxWidthWrapper";
 import AddCommentCard from "components/addComment";
+import MobileToc from "components/mobileToc";
 import Empty from "components/empty";
 import useSWR from "swr";
 import { useRouter } from "next/router";
@@ -74,9 +76,9 @@ const MdxPage = ({
       o && o.disconnect();
     };
   }, []);
-
   return (
     <>
+      {!(post?.type === "photo") && toc?.length && <MobileToc tocs={toc} curToc={curIndex} />}
       <PostHeaderWrapper style={{ "--top-padding": "128px" }}>
         <PostTagRow>
           {post?.tags?.map((tag) => (
@@ -85,7 +87,7 @@ const MdxPage = ({
         </PostTagRow>
         <LargeTitle>{post?.title}</LargeTitle>
       </PostHeaderWrapper>
-      <MaxWidthWapper>
+      <MaxWidthWrapper style={{display: "flex"}} >
         <TocContext.Provider value={{ observer }}>
           <PostWrapper full={post?.type === "photo"} >
             <MDX source={source} type={post.type} />
@@ -113,9 +115,9 @@ const MdxPage = ({
             </Slider>
           )}
         </TocContext.Provider>
-      </MaxWidthWapper>
+      </MaxWidthWrapper>
       <CommentWrapper>
-        <MaxWidthWapper style={{ flexDirection: "column" }}>
+        <MaxWidthWrapper style={{ display: "flex",flexDirection: "column" }}>
           <CommentWrapper>
             <AddCommentCard id={post.title} />
             <ArticleHeading level={2}>最新评论</ArticleHeading>
@@ -131,7 +133,7 @@ const MdxPage = ({
               <Empty description="感谢阅读，这篇文章还没有评论，欢迎发表意见！" />
             )}
           </CommentWrapper>
-        </MaxWidthWapper>
+        </MaxWidthWrapper>
       </CommentWrapper>
     </>
   );

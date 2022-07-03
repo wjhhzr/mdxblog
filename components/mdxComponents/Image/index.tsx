@@ -1,27 +1,61 @@
 // @ts-nocheck
 import React, { useContext, useEffect, useRef } from 'react';
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import NextImage from 'next/image'
 import VideoGif from 'components/video'
+import { aspectRatioHack } from 'lib/function/cssMixins'
 export const ImageWrapper = styled.span`
     position:relative;
     display:block ;
-    margin-top: ${({type})=>type==="photo" ? 0 : "2em"};
-    margin-bottom: ${({type})=>type==="photo" ? 0 : "2em"};
     width: 100%;
-    aspect-ratio: ${({type})=>type==="photo" ? "1000/679" : "16/9"} ;
+    ${({ type }) => type === "photo" ? aspectRatioHack(1000, 679) : aspectRatioHack(16, 9)}
     z-index: 1;
-    border-radius:5px ;
-    padding: ${({type})=>type==="photo" ? "calc(100% / 1000 * 679 / 2)" : "calc(100% / 16 * 9 / 2)"} 0;
 `;
 
-function Image(props){
+const PhotoWrapper = styled.span`
+    display: inline-block;
+    padding: 10px 10px 0;
+    border: 1px solid var(--color-gray-100);
+    width: 100%;
+    margin-bottom: 20px;
+    ${({ type }) => type === "photo" && css`
+    box-shadow:
+        0px 0.5px 4.2px rgba(0, 0, 0, 0),
+        0px 1.2px 7.7px rgba(0, 0, 0, 0.003),
+        0px 2.7px 12.5px rgba(0, 0, 0, 0.014),
+        0px 7px 27px rgba(0, 0, 0, 0.06);
+    `}
+`;
+
+const ImgTipWrapper = styled.p`
+    text-align: center;
+    padding:  0 0 5px;
+`;
+const ImgTip = styled.span`
+    display: inline-block;  
+    text-align: left;
+    color: var(--color-gray-700);
+    font-size: 16px;
+`;
+
+function Image(props) {
     if (props.src.includes("mp4")) {
-        return <VideoGif  src={props.src}   />
+        return <VideoGif src={props.src} />
     }
-    return <ImageWrapper type={props.type} >
-        <NextImage {...props} layout="fill" objectFit="contain"  alt='图片' />
-    </ImageWrapper>
+
+    return (
+        <PhotoWrapper type={props.type} >
+            <ImageWrapper type={props.type} >
+                <NextImage {...props} layout="fill" objectFit="contain" alt='图片' />
+            </ImageWrapper>
+            <ImgTipWrapper >
+                <ImgTip>
+                    {props.alt}
+                </ImgTip>
+            </ImgTipWrapper>
+        </PhotoWrapper>
+    )
+
 }
 
 

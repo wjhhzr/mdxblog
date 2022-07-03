@@ -21,6 +21,7 @@ const GlobalStyles = createGlobalStyle`
 
   html, body {
     height: 100%;
+    scroll-behavior: smooth;
   }
 
   img, picture, video, canvas, svg {
@@ -99,12 +100,18 @@ const GlobalStyles = createGlobalStyle`
     url('//at.alicdn.com/t/webfont_0q82cltaxst.svg#思源黑体-粗') format('svg'); /* iOS 4.1- */
   }
 
+  /* @font-face {
+    font-family: MYFONT;
+    font-display: swap;
+    src:url('/font/syht/PingFangSC-Regular.woff2') format('woff2');
+  } */
+
   /* CSS Variables */
   :root {
     --font-weight-bold: 600;
     --font-weight-medium: 500;
     --font-weight-light: 400;
-    --font-family: "思源黑体", Helvetica,"Microsoft YaHei", Arial, sans-serif;
+    --font-family: 思源黑体, MYFONT,  Helvetica,"Microsoft YaHei", Arial, sans-serif;
     --font-family-mono: 'League Mono', 'Fira Mono', monospace;
     --font-family-spicy: 'Sriracha', 'Wotfard', Futura, -apple-system, sans-serif;
 

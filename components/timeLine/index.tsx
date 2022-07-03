@@ -1,5 +1,6 @@
 // @ts-nocheck
 import React from "react";
+import useTextWidth from "src/hooks/useFontWidth";
 import TimeLineWrapper,{ItemWrapper, ItemTail, TimeText, TimeLabel, Timedot} from './style'
 
 const TimeLine = ({
@@ -13,18 +14,20 @@ const TimeLine = ({
     )
 }
 
-TimeLine.Item = ({
+const Item = ({
     label,
     time,
     ...rest
 })=>{
-
-    return <ItemWrapper {...rest} style={{"--left-percent": time.length ? (time.length/2 + "ch") : "19ch" }} >
+    const width = useTextWidth(time, "14px");
+    return <ItemWrapper {...rest} style={{"--left-percent": width }} >
         <ItemTail></ItemTail>
         <TimeText >{time}</TimeText>
         <Timedot></Timedot>
         <TimeLabel>{label}</TimeLabel>
     </ItemWrapper>
 }
+
+TimeLine.Item = Item
 
 export default TimeLine;

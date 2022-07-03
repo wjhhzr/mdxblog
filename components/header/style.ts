@@ -1,16 +1,5 @@
 import styled, { css } from "styled-components";
-import { mobileBreakpoint } from "lib/function/responsive";
-export const MaxWidthWapper = styled.div`
-  width: 100%;
-  max-width: 1100px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 16px;
-  padding-right: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
+import { mobileBreakpoint } from "lib/function/cssMixins";
 
 export const HeaderWapper = styled.header`
   height: 60px;
@@ -26,6 +15,7 @@ export const HeaderWapper = styled.header`
 export const HeaderLeft = styled.div`
   display: flex;
   justify-content: space-between;
+  flex: 1;
 `;
 
 export const HeaderRight = styled.div`
@@ -70,7 +60,9 @@ export const NavigationList = styled.ul`
   list-style: none;
 `;
 
-export const NavigationItem = styled.li``;
+export const NavigationItem = styled.li`
+  opacity: 0.8;
+`;
 
 export const UnstyledButton = styled.button`
   opacity: 0.7;

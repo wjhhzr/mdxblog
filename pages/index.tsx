@@ -10,12 +10,14 @@ import { asyncMap } from "@arcath/utils/lib/functions/async-map";
 import { pick } from "@arcath/utils/lib/functions/pick";
 import { getPosts } from "lib/data/posts";
 import Layout from "components/layout";
-import MaxWidthWapper, { HeaderSectionTitle, ArticleList } from "./style";
+import { HeaderSectionTitle, ArticleList } from "./style";
 import Spacer from "components/spacer";
 import PostCard from "components/postCard";
 import { POST } from "components/postCard";
 import Introduce from "components/introduce";
 import useIntroduce from "src/hooks/useIntroduce";
+import MaxWidthWrapper from "components/maxWidthWrapper";
+
 
 export const getStaticProps = async ({}: GetStaticPropsContext) => {
   const posts = await asyncMap(await getPosts(), async (post) => {
@@ -46,7 +48,7 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   const { title, labels } = useIntroduce();
   return (
     <Layout>
-      <MaxWidthWapper>
+      <MaxWidthWrapper>
         <Introduce title={title} labels={labels} />
         <HeaderSectionTitle>最新发布</HeaderSectionTitle>
         <Spacer height={36} />
@@ -55,7 +57,7 @@ const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
             <PostCard key={post.date} post={post} />
           ))}
         </ArticleList>
-      </MaxWidthWapper>
+      </MaxWidthWrapper>
     </Layout>
   );
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { useSpring, useTrail, animated } from 'react-spring';
 import  { ThemeContext}  from '../../lib/theme/index';
-import { mobileBreakpoint } from 'lib/function/responsive';
+import { mobileBreakpoint } from 'lib/function/cssMixins';
 const QUERY = '(prefers-reduced-motion: no-preference)';
 
 

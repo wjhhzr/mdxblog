@@ -250,3 +250,23 @@ export const INTRODUCE = {
         }]
     }
 }
+
+export const ROUTES = [
+    {
+        href: "/",
+        route: "首页",
+        headerHidden: true
+    },
+    {
+        href: "/posts",
+        route: "博客"
+    },
+    {
+        href: "/logs",
+        route: "日志"
+    },
+    {
+        href: "/about",
+        route: "关于我"
+    }
+] 

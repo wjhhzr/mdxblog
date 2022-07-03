@@ -13,24 +13,23 @@ import {
   FooterBottom,
   FooterColumn,
   FooterHeading,
-  FooterColumnChildren,
-  MaxWidthWapper
+  FooterColumnChildren
 } from "./style";
 import meta from "config/meta.json";
 import React from "react";
 import RouterLink from "components/RouterLink";
-
+import MaxWidthWrapper from "components/maxWidthWrapper";
 function Footer () {
   return (
     <FooterWapper>
-      <MaxWidthWapper data-media={true} >
+      <MaxWidthWrapper mobileStyle="flex-direction: column;" style={{display:"flex", justifyContent: "space-between"}} data-media={true} >
         <FooterLeft>
           <FooterTop>
             <RouterLink href="/">
               <><LogoFirst>东方战虎</LogoFirst>.<LogoLast>辉</LogoLast></>
             </RouterLink>
             <span>
-              <FooterThanks>感谢阅读！不定期更新有用的技术文章，摄影知识！</FooterThanks>
+              <FooterThanks>感谢阅读！不定期更新有用的技术文章，有趣的照片！</FooterThanks>
             </span>
           </FooterTop>
         </FooterLeft>
@@ -44,8 +43,8 @@ function Footer () {
             </FooterColumnChildren>
           </FooterColumn>
         </FooterRight>
-      </MaxWidthWapper>
-      <MaxWidthWapper ><FooterBottom>@2022 {meta.name} All Rights Reserved</FooterBottom></MaxWidthWapper>
+      </MaxWidthWrapper>
+      <MaxWidthWrapper ><FooterBottom>@2022 {meta.name} All Rights Reserved</FooterBottom></MaxWidthWrapper>
     </FooterWapper>
   );
 };

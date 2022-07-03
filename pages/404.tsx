@@ -3,7 +3,8 @@ import { NextPage } from "next";
 import Head from "next/head";
 import RouterLink from "components/RouterLink";
 import Layout from "components/layout";
-import MaxWidthWapper from "./style";
+import MaxWidthWrapper from "components/maxWidthWrapper";
+
 
 const NotFoundPage: NextPage = () => {
   return (
@@ -11,7 +12,7 @@ const NotFoundPage: NextPage = () => {
       <Head>
         <title>Error 404 / Page Not Found</title>
       </Head>
-      <MaxWidthWapper>
+      <MaxWidthWrapper>
         <h1>404</h1>
         <p>
           <i>没有找到页面~</i>
@@ -21,7 +22,7 @@ const NotFoundPage: NextPage = () => {
             回到首页
           </RouterLink>
         </p>
-      </MaxWidthWapper>
+      </MaxWidthWrapper>
     </Layout>
   );
 };

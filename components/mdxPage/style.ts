@@ -1,18 +1,6 @@
-import { mobileBreakpoint } from "lib/function/responsive";
+import { mobileBreakpoint } from "lib/function/cssMixins";
 import styled from "styled-components";
 
-export const MaxWidthWapper = styled.div`
-  padding-top: 32px;
-  padding-bottom: 32px;
-  z-index: 2;
-  width: 100%;
-  max-width: 1100px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 16px;
-  padding-right: 16px;
-  display: flex;
-`;
 
 export const PostHeaderWrapper = styled.div`
   padding: var(--top-padding) 32px 96px 32px;

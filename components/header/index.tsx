@@ -1,7 +1,6 @@
 // @ts-nocheck
 import React, { useState } from "react";
 import {
-  MaxWidthWapper,
   HeaderWapper,
   HeaderLeft,
   HeaderRight,
@@ -9,49 +8,40 @@ import {
   LogoLast,
   NavigationList,
   NavigationWrapper,
-  NavigationItem,
-  Hamburger
+  NavigationItem
 } from "./style";
-import MobileButton from 'components/mobileBotton/mobileBotton'
 import MobileNavBar from 'components/mobileNavbar/mobileNavBar'
 import DarkModeToggleContainer from '../darkModeToogle'
 import RouterLink from "components/RouterLink";
+import MaxWidthWrapper from "components/maxWidthWrapper";
+import { ROUTES } from "src/constants";
 const Header = () => {
   // 菜单是否打开
   const [open, setOpen] = useState(false)
   return (
     <HeaderWapper>
-      <MaxWidthWapper>
+      <MaxWidthWrapper style={{display:"flex", alignItems:"center", justifyContent: "space-between"}} >
         <HeaderLeft>
-            <RouterLink href="/" >
-              <LogoFirst>东方战虎</LogoFirst>.<LogoLast>辉</LogoLast>
-            </RouterLink>
+          <RouterLink href="/" >
+            <LogoFirst>东方战虎</LogoFirst>.<LogoLast>辉</LogoLast>
+          </RouterLink>
           <NavigationWrapper>
             <NavigationList>
-              <NavigationItem>
-                <RouterLink type="nav" href="/posts">
-                  posts
-                </RouterLink>
-              </NavigationItem>
-              <NavigationItem>
-                <RouterLink type="nav" href="/about">
-                  about
-                </RouterLink>
-              </NavigationItem>
-              <NavigationItem>
-                <RouterLink type="nav" href="/logs">
-                  logs
-                </RouterLink>
-              </NavigationItem>
+              {ROUTES.map(({route, href, headerHidden}) => {
+                return !headerHidden && <NavigationItem>
+                  <RouterLink type="nav" href={href}>
+                    {route}
+                  </RouterLink>
+                </NavigationItem>
+              })}
             </NavigationList>
           </NavigationWrapper>
         </HeaderLeft>
         <HeaderRight>
-          {/* <DrawerButton /> */}
           <MobileNavBar />
           <DarkModeToggleContainer />
         </HeaderRight>
-      </MaxWidthWapper>
+      </MaxWidthWrapper>
     </HeaderWapper>
   );
 };

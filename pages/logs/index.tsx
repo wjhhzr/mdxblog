@@ -2,12 +2,14 @@
 import React from "react";
 import { NextPage, InferGetStaticPropsType, GetStaticPropsContext } from "next";
 import Layout from "components/layout";
-import MaxWidthWrapper from "./style";
+// import MaxWidthWrapper from "./style";
 import axios from "axios";
 import TimeLine from "components/timeLine";
 import dayjs from "dayjs";
 import Introduce from "components/introduce";
 import useIntroduce from "src/hooks/useIntroduce";
+import MaxWidthWrapper from "components/maxWidthWrapper";
+
 const Item = TimeLine.Item
 
 export const getStaticProps = async ({ }: GetStaticPropsContext) => {

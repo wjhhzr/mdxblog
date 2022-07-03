@@ -5,8 +5,8 @@ import { useSpring, animated, useTrail } from 'react-spring';
 import Drawer from 'components/drawer';
 import DarkModeToggleContainer from '../darkModeToogle'
 import RouterLink from 'components/RouterLink';
-import { mobileBreakpoint } from "lib/function/responsive";
-
+import { mobileBreakpoint } from "lib/function/cssMixins";
+import { ROUTES } from 'src/constants';
 const NavbarButton = styled(UnstyledButton)`
     display: none;
     z-index: 1000000;
@@ -39,32 +39,13 @@ function MobileNavBar() {
 
   const ref = useRef();
 
-  const menus = [
-    {
-      href: '/',
-      text: "最新文章"
-    },
-    {
-      href: '/posts',
-      text: "所有文章"
-    },
-    {
-      href: '/logs',
-      text: "更新日志"
-    },
-    {
-      href: '/about',
-      text: "关于我"
-    }
-  ]
-
-  const trail = useTrail(menus.length, {
+  const trail = useTrail(ROUTES.length, {
     transform: open ? 'translateX(0%)' : 'translateX(-100%)',
     opacity: open ? 1 : 0,
     config: {
       tension: 700,
       friction: open ? 60 : 20,
-      clamp: true,
+      // clamp: true,
     },
   });
   return <>
@@ -76,9 +57,9 @@ function MobileNavBar() {
         <MenuNav>
           {
             trail.map((style, index) => {
-              const { text, href } = menus[index];
+              const { route, href } = ROUTES[index];
               return <animated.div key={index} style={style} >
-                <RouterLink type="nav" href={href} style={{fontSize: 26}} >{text}</RouterLink>
+                <RouterLink type="nav" href={href} style={{fontSize: 26}} >{route}</RouterLink>
               </animated.div>
             })
           }

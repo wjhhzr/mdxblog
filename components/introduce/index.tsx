@@ -2,12 +2,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { animated, useSpring, useTrail } from 'react-spring';
 import styled, { css, keyframes } from 'styled-components';
-import { mobileBreakpoint } from "lib/function/responsive";
+import { getWidth, mobileBreakpoint } from "lib/function/cssMixins";
+import useTextWidth from 'src/hooks/useFontWidth';
 
 // 最外层容器
 const IntroduceWrapper = styled.h1`
     --font-size: calc( ( 50 / 1000 ) * 100vw);
-    ${mobileBreakpoint("--font-size: calc( ( 70 / 1000 ) * 100vw);" )}
+    ${mobileBreakpoint("--font-size: calc( ( 70 / 1000 ) * 100vw);")}
 
     padding: var(--font-size) 0;
     font-size: var(--font-size);
@@ -58,7 +59,7 @@ const LunboText = styled.span`
                 ${delay && css`animation-delay: 250ms`}
             `;
         }
-        
+
         if (up) {
             return css`
                 animation: ${fadeOut} 250ms cubic-bezier(.14,.98,.08,.98) forwards;
@@ -77,21 +78,29 @@ const Introduce = ({
     ...rest
 }) => {
     const l = labels?.length || 0;
-// 当前展示的文字索引，默认第一个元素
-const [showIndex, setShowIndex] = useState(0);
+    // 当前展示的文字索引，默认第一个元素
+    const [showIndex, setShowIndex] = useState(0);
 
-// 当前已展示过的文字索引
-const [upIndex, setUpIndex] = useState();
+    // 当前已展示过的文字索引
+    const [upIndex, setUpIndex] = useState();
 
-    const maxL = useMemo(() => maxLength(labels, "label"), [])
-
+    const {maxL, maxText} = useMemo(() => maxLength(labels, "label"), [])
+    // // 文字宽度
+    // const width = useTextWidth(maxText, "calc( ( 70 / 1000 ) * 100vw)"); 
+    // console.log("文字的宽度",maxText, width);
+    
     function maxLength(arr, key) {
-        let max = 0;
-        arr.map(i => {
+        let maxL = 0;
+        let maxIndex = 0;
+        arr.map((i,k) => {
             const l = i[key].length;
-            (l > max) && (max = l)
+            if (l > maxL) {
+                maxL = l;
+                maxIndex = k;
+            }
         })
-        return max;
+
+        return {maxL, maxText:arr[maxIndex]};
     }
 
     useEffect(() => {
@@ -112,7 +121,7 @@ const [upIndex, setUpIndex] = useState();
 
     return <IntroduceWrapper  {...rest} >
         {title}
-        <Mask style={{width:`${maxL}ch`}} >
+        <Mask style={{ width: `${maxL}ch` }} >
             {labels && labels.map(({ backgroundImage = DEFAULT_IMAGE, label }, i) => <LunboText key={i} delay={delay} show={showIndex === i} up={upIndex === i} style={{ "--color-start": i, "--color-end": i + 1, backgroundImage }} >{label}</LunboText>)}
         </Mask>
     </IntroduceWrapper>
