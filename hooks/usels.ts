@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
 
+/**
+ * 
+ * @param keys 
+ * @returns 
+ */
+
 export default function useLocalStorange(keys) {
   const [cache, setCache] = useState({});
   useEffect(() => {

@@ -9,7 +9,7 @@ export const ImageWrapper = styled.span`
     display:block ;
     width: 100%;
     ${({ type }) => type === "photo" ? aspectRatioHack(1000, 679) : aspectRatioHack(16, 9)}
-    z-index: 1;
+    z-index: 0;
 `;
 
 const PhotoWrapper = styled.span`
@@ -27,7 +27,9 @@ const PhotoWrapper = styled.span`
     `}
 `;
 
-const ImgTipWrapper = styled.p`
+const ImgTipWrapper = styled.span`
+    display: inline-block;
+    width: 100%;
     text-align: center;
     padding:  0 0 5px;
 `;

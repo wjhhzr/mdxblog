@@ -28,7 +28,7 @@ const Header = () => {
           <NavigationWrapper>
             <NavigationList>
               {ROUTES.map(({route, href, headerHidden}) => {
-                return !headerHidden && <NavigationItem>
+                return !headerHidden && <NavigationItem key={href}>
                   <RouterLink type="nav" href={href}>
                     {route}
                   </RouterLink>

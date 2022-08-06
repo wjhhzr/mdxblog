@@ -4,7 +4,7 @@ import type {
   InferGetStaticPropsType,
   GetStaticPropsContext,
 } from "next";
-import React from "react";
+import React, { useEffect } from "react";
 import { replaceProperty } from "@arcath/utils/lib/functions/replace-property";
 import { asyncMap } from "@arcath/utils/lib/functions/async-map";
 import { pick } from "@arcath/utils/lib/functions/pick";
@@ -17,8 +17,7 @@ import { POST } from "components/postCard";
 import Introduce from "components/introduce";
 import useIntroduce from "src/hooks/useIntroduce";
 import MaxWidthWrapper from "components/maxWidthWrapper";
-
-
+import logger from "weblog"
 export const getStaticProps = async ({}: GetStaticPropsContext) => {
   const posts = await asyncMap(await getPosts(), async (post) => {
     const info = replaceProperty(

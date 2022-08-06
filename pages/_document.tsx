@@ -37,10 +37,7 @@ class AntDocument extends Document {
         try {
             ctx.renderPage = () =>
                 originalRenderPage({
-                    enhanceApp: App => (props) =>
-                        // App挂载样式
-                        sheet.collectStyles(<><App {...props} /></>)
-                })
+                    enhanceApp: App => (props) =>sheet.collectStyles(<><App {...props} /></>)})
             // 因为覆盖了Document，所以要重新返回页面的props
             const props = await Document.getInitialProps(ctx)
             return {

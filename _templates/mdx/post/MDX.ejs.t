@@ -10,4 +10,5 @@ tags:
 <% tags.forEach(function(t){ -%>
   <%= `- ${t}`%>
 <% }); -%>
+type: article
 ---

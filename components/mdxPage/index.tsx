@@ -78,7 +78,7 @@ const MdxPage = ({
   }, []);
   return (
     <>
-      {!(post?.type === "photo") && toc?.length && <MobileToc tocs={toc} curToc={curIndex} />}
+      {!(post?.type === "photo") && toc?.length > 0 && <MobileToc tocs={toc} curToc={curIndex} />}
       <PostHeaderWrapper style={{ "--top-padding": "128px" }}>
         <PostTagRow>
           {post?.tags?.map((tag) => (
@@ -92,7 +92,7 @@ const MdxPage = ({
           <PostWrapper full={post?.type === "photo"} >
             <MDX source={source} type={post.type} />
           </PostWrapper>
-          {!(post?.type === "photo") && toc?.length && (
+          {!(post?.type === "photo") && toc?.length > 0 && (
             <Slider>
               <TocWrapper>
                 <TocTitle>文章目录</TocTitle>

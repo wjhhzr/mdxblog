@@ -6,10 +6,24 @@ import DarkProvider from "lib/theme/index";
 import { THEME } from 'src/constants'
 import { ThemeProvider } from 'styled-components'
 import Router from "next/router";
+import logger from "hui-weblog"
+import  'antd/lib/table/style/index.css'
+
 function MyApp({ Component, pageProps }: AppProps) {
+
   useEffect(()=>{
-    Router.events.on("routeChangeComplete",(e)=>{
-      console.log(e);
+    const Logger = logger.init({
+      url: "/api/logger",
+    })
+
+    Logger.register({
+      target: Router.events.on,
+      type: "routeChangeComplete",
+      listener: (e)=>{
+        return {
+          url:  decodeURIComponent(e)
+        }
+      }
     })
   },[])
   return (

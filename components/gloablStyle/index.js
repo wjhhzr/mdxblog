@@ -53,6 +53,7 @@ const GlobalStyles = createGlobalStyle`
     transition: ${(p) => {
       return `color ${COLOR_SWAP_TRANSITION_DURATION}ms linear, background ${COLOR_SWAP_TRANSITION_DURATION}ms linear`;
     }};
+    -webkit-tap-highlight-color: transparent;
   }
 
   a:focus {

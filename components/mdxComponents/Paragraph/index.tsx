@@ -15,6 +15,7 @@ function Paragraph({
     children,
     ...rest
 }:IPropsHeading){
+    
     return <ParagraphWrapper {...rest} >
         {children}
     </ParagraphWrapper>

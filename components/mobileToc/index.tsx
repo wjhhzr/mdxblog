@@ -20,15 +20,16 @@ const MobileTocWrapper = styled.div`
     right: 0;
     top: 60px;
     padding: 0 16px;
-    z-index: 10;
+    z-index: 1;
     background-color: var(--color-background);
-    box-shadow: 2px 3px 5px 0px var(--color-gray-100);
+    border-bottom: 1px solid var(--color-gray-100);
+    padding-bottom: 10px;
 `;
 
 const TocTitle = styled.div`
     display: flex;
     justify-content: space-between;
-    z-index: 20;
+    z-index: 3;
 `;
 
 const Arrow = styled.span<Iprops>`
@@ -48,12 +49,10 @@ const Arrow = styled.span<Iprops>`
 
 const TocMask = styled.div`
     position: fixed;
-    z-index: 9;
     top: 60px;
     left: 0;
     right: 0;
     bottom: 0;
-    touch-action: none;
 `;
 
 const CurTocText = styled.div`
@@ -71,7 +70,6 @@ const TocList = styled.ul<Iprops>`
     max-height:  0;
     ${({ open }) => open && "max-height: 1000px;"}
     overflow: hidden;
-    touch-action: none;
 `;
 
 const TocItem = styled.li`
@@ -99,7 +97,7 @@ const MobileToc = ({
     const [open, setOpen] = useState(false)
     if (tocs?.length === 0) return null;
     return <MobileTocWrapper>
-        <TocTitle onClick={() => setOpen(!open)} ><CurTocText>{curToc}</CurTocText><MuluText>目录<Arrow open={open}/></MuluText></TocTitle>
+        <TocTitle onClick={() =>setOpen(!open)} ><CurTocText>{curToc}</CurTocText><MuluText>目录<Arrow open={open}/></MuluText></TocTitle>
         <TocList open={open} >
             {tocs.map(({ id, level }) => {
                 return <ContentLink onClick={() => setOpen(false)} key={id} href={`#${id}`} data-level={level} style={{ color: id === curToc && "var(--color-primary)", }} >{id}</ContentLink>

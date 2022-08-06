@@ -81,11 +81,8 @@ export const components = {
 const MDX: React.FC<{ source: string, type: "photo" | "article" }> = ({ source, type }) => {
 
   const Component = useMemo(() => getMDXComponent(source), [source])
-  
   if (type === "photo") {
-    components.img = (props)=><Image  type="photo" {...props} />;
-  } else {
-    components.img = Image
+    components.img = (props)=><Image  type={type} {...props} />;
   }
   return <Component components={components} />
 }

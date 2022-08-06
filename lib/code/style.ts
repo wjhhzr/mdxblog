@@ -9,7 +9,7 @@ export const CodeSnippetOuterWrapper = styled.div`
 // 代码语言的容器
 export const StaticCodeWrapperLanguage = styled.div`
   position: absolute;
-  z-index: 2;
+  z-index: 0;
   top: 0px;
   right: 14px;
   transform: translateY(-100%);
