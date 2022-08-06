@@ -41,13 +41,12 @@ const ImgTip = styled.span`
 `;
 
 function Image(props) {
+    const alt = useMemo(()=>props.alt.replace("reverse", ""),[props.alt])
     if (props.src.includes("mp4")) {
         return <VideoGif src={props.src} />
     }
 
     const isReverse = props.alt.includes("reverse");
-
-    const alt = useMemo(()=>props.alt.replace("reverse", ""),[])
     
     return (
         <PhotoWrapper type={props.type} >
