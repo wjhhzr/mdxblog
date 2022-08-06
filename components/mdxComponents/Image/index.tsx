@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useMemo, useRef } from 'react';
 import styled, { css } from "styled-components";
 import NextImage from 'next/image'
 import VideoGif from 'components/video'
@@ -8,7 +8,7 @@ export const ImageWrapper = styled.span`
     position:relative;
     display:block ;
     width: 100%;
-    ${({ type }) => type === "photo" ? aspectRatioHack(1000, 679) : aspectRatioHack(16, 9)}
+    ${({ type, isReverse }) => type === "photo" ? ( isReverse ? aspectRatioHack(2, 3) : aspectRatioHack(3, 2)) : aspectRatioHack(16, 9)}
     z-index: 0;
 `;
 
@@ -45,14 +45,18 @@ function Image(props) {
         return <VideoGif src={props.src} />
     }
 
+    const isReverse = props.alt.includes("reverse");
+
+    const alt = useMemo(()=>props.alt.replace("reverse", ""),[])
+    
     return (
         <PhotoWrapper type={props.type} >
-            <ImageWrapper type={props.type} >
+            <ImageWrapper type={props.type} isReverse={isReverse} >
                 <NextImage {...props} layout="fill" objectFit="contain" alt='图片' />
             </ImageWrapper>
             <ImgTipWrapper >
                 <ImgTip>
-                    {props.alt}
+                    {alt}
                 </ImgTip>
             </ImgTipWrapper>
         </PhotoWrapper>
