@@ -10,7 +10,7 @@ export const HeaderWapper = styled.header`
   transition: color 300ms linear, background 300ms linear;
   display: flex;
   align-items:center;
-  overflow: hidden;
+  /* overflow: hidden; */
 `;
 
 export const HeaderLeft = styled.div`
