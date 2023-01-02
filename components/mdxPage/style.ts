@@ -97,10 +97,11 @@ export const PostWrapper = styled.article<{full:string}>`
     font-family: var(--font-family-mono);
     font-size: 0.9em;
     padding: 4px 6px;
-    background: rgba(115, 125, 140, 0.17);
+    background: var(--color-gray-100);
     border-radius: 3px;
     -webkit-box-decoration-break: clone;
     font-size: calc(1.1875rem);
+    margin: 0 4px;
   }
 
   h2::after {
