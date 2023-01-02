@@ -20,7 +20,7 @@ const MobileTocWrapper = styled.div`
     right: 0;
     top: 60px;
     padding: 0 16px;
-    z-index: 5;
+    z-index: 2;
     background-color: var(--color-background);
     border-bottom: 1px solid var(--color-gray-100);
     padding-bottom: 10px;
