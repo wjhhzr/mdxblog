@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React from "react";
+import React, { useEffect } from "react";
 import { NextPage, InferGetStaticPropsType, GetStaticPropsContext } from "next";
 import Layout from "components/layout";
 // import MaxWidthWrapper from "./style";
@@ -9,22 +9,33 @@ import dayjs from "dayjs";
 import Introduce from "components/introduce";
 import useIntroduce from "src/hooks/useIntroduce";
 import MaxWidthWrapper from "components/maxWidthWrapper";
+import Mongo from "lib/db/mongo";
+import updataLog from "../../lib/db/updatelog";
 
 const Item = TimeLine.Item
 
 export const getStaticProps = async ({ }: GetStaticPropsContext) => {
-    console.log("当前请求地址", process.env.API_HOST);
-    
-    const logs = (await axios.get(`${process.env.API_HOST}/blog/gitlog/getLogs`))?.data
+    // 先更新日志
+    process.env.NODE_ENV !== "development" && await updataLog()
+    // 查询mongo，静态渲染
+    const mongo = new Mongo({
+        dbUrl: process.env.DB,
+        database: "blog",
+        collection: "updateLog"
+    })
+    const logs = await mongo.query({})
     return {
         props: {
-            logs,
+            logs: logs?.map(item=>{
+                delete item._id
+                return item
+            }) || []
         },
     };
 };
 
 const LogsPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
-    logs,
+    logs
 }) => {
     const { title, labels } = useIntroduce();    
     return (
