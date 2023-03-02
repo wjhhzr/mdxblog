@@ -9,8 +9,10 @@ import dayjs from "dayjs";
 import Introduce from "components/introduce";
 import useIntroduce from "src/hooks/useIntroduce";
 import MaxWidthWrapper from "components/maxWidthWrapper";
-import Mongo from "lib/db/mongo";
+import mongo from "lib/db/mongo";
 import updataLog from "../../lib/db/updatelog";
+import { COLLECTIONS } from "src/constants";
+
 
 const Item = TimeLine.Item
 
@@ -18,11 +20,7 @@ export const getStaticProps = async ({ }: GetStaticPropsContext) => {
     // 先更新日志
     process.env.NODE_ENV !== "development" && await updataLog()
     // 查询mongo，静态渲染
-    const mongo = new Mongo({
-        dbUrl: process.env.DB,
-        database: "blog",
-        collection: "updateLog"
-    })
+    mongo.setCollection(COLLECTIONS.updateLog)
     const logs = await mongo.query({})
     return {
         props: {

@@ -7,10 +7,12 @@ class Mongo {
     
     private database:string;    // 库名
     private collection:string;  // 表名
+
+    static instance: Mongo | null;
     constructor({
         dbUrl,
-        database,
-        collection
+        database = "blog",
+        collection = ""
     }) {
         this.dbUrl = dbUrl;
         this.connection;
@@ -23,9 +25,15 @@ class Mongo {
         this.collection = collection;
     }
 
+    static getInstance(){
+        return Mongo.instance || (Mongo.instance = new Mongo({
+            dbUrl: process.env.DB
+        }))
+    }
+
     async connect() {
         if (!this.connection) {
-            this.connection = await mongoose.createConnection(this.dbUrl, { useNewUrlParser: true, useUnifiedTopology: true, authSource: 'admin', dbName: this.database })
+            this.connection = await mongoose.createConnection(this.dbUrl, { useNewUrlParser: true, useUnifiedTopology: true, authSource: 'admin', dbName: this.database });
         }
         return this.connection
     }
@@ -40,16 +48,26 @@ class Mongo {
         return await connection.collection(this.collection).insertOne(obj)
     }
 
-    async query(condition:any, sort={date: -1}):Promise<any[]> {
+    async query(condition:any, sort={date: -1}):Promise<any> {
         const connection = await this.connect();
         const res = connection.collection(this.collection).find(condition).sort(sort)
-        return new Promise((resolve, reject) => {
+        const data = await new Promise((resolve, reject) => {
             res.toArray((e, docs) => {
                 e && reject(e);
                 resolve(docs);
             });
+            
         })
+        res.close();
+        return data
     }
+
+    async findAndUpdate(condition:Record<string,any>, update: Record<string,any>){
+        const connection = await this.connect();
+        const collection = connection.collection(this.collection)
+        return await collection.findOneAndUpdate(condition, update);
+    }
+
 }
 
-export default Mongo;
+export default Mongo.getInstance();

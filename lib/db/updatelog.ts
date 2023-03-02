@@ -1,7 +1,8 @@
 import simpleGit from "simple-git";
 import path from 'path';
 import fs from 'fs-extra'
-import Mongo from './mongo'
+import mongo from './mongo'
+import { COLLECTIONS } from "src/constants";
 const codePath = path.join(process.cwd(), "code");
 const options = {
     baseDir: codePath,
@@ -18,16 +19,12 @@ const updateLogs = async () => {
         if (codeExist) fs.removeSync(codePath);
         fs.mkdirsSync(codePath);
         const git = simpleGit(options)
-        const repoPath = "https://gitee.com/codehunterwjh/mdxblog.git"
+        const repoPath = process.env.REPO;
         await git.clone(repoPath, codePath)
         const logoInfo = await git.log();
         const newLogs = logoInfo.all;
         // 获取到日志后，就更新日志库
-        const mongo = new Mongo({
-            dbUrl: process.env.DB,
-            database: "blog",
-            collection: "updateLog"
-        })
+        mongo.setCollection(COLLECTIONS.updateLog)
         const oldLogs = await mongo.query({});
         console.log("查询到的更更新日志", oldLogs);
         // 寻找需要更新的数据

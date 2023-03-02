@@ -269,4 +269,15 @@ export const ROUTES = [
         href: "/about",
         route: "关于我"
     }
-] 
+]
+
+export const COLLECTIONS =  {
+    // 博客信息表
+    article: "article",
+    // 评论表
+    comments: "comments",
+    // 用户日志表
+    userLog: "userLog",
+    // 更新日志表
+    updateLog: "updateLog"
+}
