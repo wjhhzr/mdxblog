@@ -18,7 +18,7 @@ const Item = TimeLine.Item
 
 export const getStaticProps = async ({ }: GetStaticPropsContext) => {
     // 先更新日志
-    process.env.NODE_ENV !== "development" && await updataLog()
+    // process.env.NODE_ENV !== "development" && await updataLog()
     // 查询mongo，静态渲染
     mongo.setCollection(COLLECTIONS.updateLog)
     const logs = await mongo.query({})
