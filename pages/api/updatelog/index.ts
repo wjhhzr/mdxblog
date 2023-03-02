@@ -12,11 +12,25 @@ export default async function updateLog(req:NextApiRequest, res: NextApiResponse
   if (shaHamc !== gitToken) {
     res.status(500).json("not allow!")
   }
-  // 更新日志
-  console.log("hook触发了！",req.body);
-  const { hook } = req.body;
-  if (hook.events?.[0] !== "push") {
-    res.status(500).json("not allow!")
+  try {
+    // 更新日志
+    console.log("hook触发了！",req.body);
+    const { head_commit, ref } = req.body;
+    const {id, timestamp, message, author} = head_commit;
+    const commitInfo = {
+      hash: id,
+      date: timestamp,
+      message,
+      refs: ref,
+      body: "",
+      author_name:author?.name,
+      author_email: author?.email
+    }
+    mongo.setCollection(COLLECTIONS.updateLog);
+    await mongo.insert(commitInfo)
+    res.status(200).json("ok");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json("update error!")
   }
-  res.status(200).json("ok");
 }
