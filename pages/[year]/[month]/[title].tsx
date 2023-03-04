@@ -7,6 +7,8 @@ import { GetStaticPaths, GetStaticPropsContext } from "next";
 import { FC } from "react";
 import { POST } from "components/postCard";
 import MdxPage from 'components/mdxPage'
+import axios from "axios";
+import useLocalStorange from "hooks/usels";
 interface ArticlePost extends POST {
   tags: string[];
 }
@@ -81,6 +83,27 @@ const Article: FC<{
   source,
   comments=[]
 }) => {
+  const [data] = useLocalStorange(["userId"])
+  // const like = ()=>{
+  //   axios('/api/article/like', {
+  //     method: "POST",
+  //     data: {
+  //       userid: data.userId,
+  //       articleId: post.title,
+  //       likenum: 5
+  //     }
+  //   })
+  // }
+
+  useEffect(()=>{
+    axios('/api/article/read', {
+      method: "POST",
+      data: {
+        userid: data.userId,
+        articleId: post.title
+      }
+    })
+  }, [])
   return (
     <Layout title={post.title} description={post.lead} >
       <MdxPage source={source.code} post={post} toc={source.toc} />
