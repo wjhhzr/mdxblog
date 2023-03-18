@@ -1,5 +1,5 @@
 
-import mongo from "lib/db/mongo";
+import mongo from "src/lib/db/mongo";
 import { COLLECTIONS } from "src/constants";
 export default async function getComments(req, res) {
   mongo.setCollection(COLLECTIONS.userLog)

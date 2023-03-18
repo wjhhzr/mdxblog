@@ -1,9 +1,9 @@
 import React from "react";
 import { NextPage } from "next";
 import Head from "next/head";
-import RouterLink from "components/RouterLink";
-import Layout from "components/layout";
-import MaxWidthWrapper from "components/maxWidthWrapper";
+import RouterLink from "src/components/RouterLink";
+import Layout from "src/components/layout";
+import MaxWidthWrapper from "src/components/maxWidthWrapper";
 
 
 const NotFoundPage: NextPage = () => {

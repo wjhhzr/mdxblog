@@ -8,18 +8,20 @@ import React, { useEffect } from "react";
 import { replaceProperty } from "@arcath/utils/lib/functions/replace-property";
 import { asyncMap } from "@arcath/utils/lib/functions/async-map";
 import { pick } from "@arcath/utils/lib/functions/pick";
-import { getPosts } from "lib/data/posts";
-import Layout from "components/layout";
+import { getPosts } from "src/lib/data/posts";
+import Layout from "src/components/layout";
 import { HeaderSectionTitle, ArticleList } from "./style";
-import Spacer from "components/spacer";
-import PostCard from "components/postCard";
-import { POST } from "components/postCard";
-import Introduce from "components/introduce";
+import Spacer from "src/components/spacer";
+import PostCard from "src/components/postCard";
+import { POST } from "src/components/postCard";
+import Introduce from "src/components/introduce";
 import useIntroduce from "src/hooks/useIntroduce";
-import MaxWidthWrapper from "components/maxWidthWrapper";
-import logger from "weblog"
+import MaxWidthWrapper from "src/components/maxWidthWrapper";
 export const getStaticProps = async ({}: GetStaticPropsContext) => {
-  const posts = await asyncMap(await getPosts(), async (post) => {
+
+  const posts = await asyncMap(await getPosts({
+    limit: false
+  }), async (post) => {
     const info = replaceProperty(
       pick(await post.data, [
         "slug",

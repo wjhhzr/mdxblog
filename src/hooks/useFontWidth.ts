@@ -1,5 +1,5 @@
 import React from 'react'
-import { getWidth } from "lib/function/cssMixins";
+import { getWidth } from "src/lib/function/cssMixins";
 import { useEffect, useState } from "react";
 
 function useTextWidth(text:string,fontSize:any){

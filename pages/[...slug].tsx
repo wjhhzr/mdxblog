@@ -1,8 +1,8 @@
 // @ts-nocheck
 import { pick } from "@arcath/utils";
-import Layout from "components/layout";
-import MdxPage from "components/mdxPage";
-import { getPageBySlug, getPages } from "lib/data/pages";
+import Layout from "src/components/layout";
+import MdxPage from "src/components/mdxPage";
+import { getPageBySlug, getPages } from "src/lib/data/pages";
 import {
   GetStaticPaths,
   GetStaticPropsContext,

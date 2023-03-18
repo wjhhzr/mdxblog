@@ -1,14 +1,14 @@
 // @ts-nocheck
 import React from "react";
 import { NextPage, InferGetStaticPropsType, GetStaticPropsContext } from "next";
-import Layout from "components/layout";
-import { getPosts, PostFrontmatter, PostProperties } from "lib/data/posts";
+import Layout from "src/components/layout";
+import { getPosts, PostFrontmatter, PostProperties } from "src/lib/data/posts";
 import { pick } from "@arcath/utils/lib/functions/pick";
 import { replaceProperty } from "@arcath/utils/lib/functions/replace-property";
 import { asyncMap } from "@arcath/utils/lib/functions/async-map";
 import { ContentPrivew, CardListWrapper } from "./style";
-import PostCard from "components/postCard";
-import MaxWidthWrapper from "components/maxWidthWrapper";
+import PostCard from "src/components/postCard";
+import MaxWidthWrapper from "src/components/maxWidthWrapper";
 
 export const POST_FIELDS: (keyof (PostFrontmatter & PostProperties))[] = [
   "slug",

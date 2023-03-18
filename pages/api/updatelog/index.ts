@@ -1,5 +1,5 @@
 
-import mongo from "lib/db/mongo";
+import mongo from "src/lib/db/mongo";
 import { COLLECTIONS } from "src/constants";
 import type { NextApiRequest, NextApiResponse } from 'next'
 import {createHmac} from "crypto";

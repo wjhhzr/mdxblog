@@ -1,4 +1,4 @@
-import mongo from "lib/db/mongo";
+import mongo from "src/lib/db/mongo";
 import { COLLECTIONS } from "src/constants";
 import type { NextApiRequest, NextApiResponse } from 'next'
 export default async function like(req: NextApiRequest, res: NextApiResponse) {

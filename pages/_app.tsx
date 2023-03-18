@@ -1,8 +1,9 @@
 // @ts-nocheck
 import React, { useEffect } from "react";
-import GlobalStyles from 'components/gloablStyle'
+import GlobalStyles from 'src/components/gloablStyle'
 import type { AppProps } from "next/app";
-import DarkProvider from "lib/theme/index";
+import { useRouter } from 'next/router'
+import DarkProvider from "src/lib/theme/index";
 import { THEME } from 'src/constants'
 import { ThemeProvider } from 'styled-components'
 import Router from "next/router";
@@ -10,12 +11,10 @@ import logger from "hui-weblog"
 import  'antd/lib/table/style/index.css'
 
 function MyApp({ Component, pageProps }: AppProps) {
-
   useEffect(()=>{
     const Logger = logger.init({
       url: "/api/logger",
     })
-
     Logger.register({
       target: Router.events.on,
       type: "routeChangeComplete",
@@ -37,3 +36,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 }
 
 export default MyApp;
+
+export function reportWebVitals(metric) {
+  console.log(metric)
+}
