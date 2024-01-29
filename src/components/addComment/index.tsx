@@ -6,6 +6,7 @@ import axios from "axios";
 import { useRef } from "react";
 import { useSWRConfig } from "swr";
 import useLocalStorange from "src/hooks/usels";
+import dayjs from "dayjs";
 function AddComment({ id }: { setComments?: any; id: string }) {
   const formRef = useRef();
   const { mutate } = useSWRConfig();
@@ -24,6 +25,7 @@ function AddComment({ id }: { setComments?: any; id: string }) {
       content: content.value,
       articleId: id,
       ...user,
+      date: dayjs()
     });
     // 保存用户
     setUserCache(user);
