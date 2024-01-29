@@ -18,8 +18,10 @@ export const AddCommentCard = styled.div`
         color: var(--color-gray-700);
         margin-bottom: 10px;
     }
-
-    .item-wrapper {
+    .ant-form-item {
+        margin-bottom: 5px;
+    }
+    /* .item-wrapper { */
         padding: 10px 0;
 
         .item-label {
@@ -49,7 +51,7 @@ export const AddCommentCard = styled.div`
         textarea {
             resize: none;
         }
-    }
+    /* } */
 
     .submit-row {
         padding: 10px 0 0;

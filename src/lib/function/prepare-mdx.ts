@@ -70,7 +70,6 @@ export const prepareMDX = async (
     }
     const { bundleMDX } = await import('mdx-bundler');
     const { directory, imagesUrl } = options;
-    console.log("图片地址", imagesUrl);
     
     const gfm = (await import('remark-gfm')) as any
     let toc = []

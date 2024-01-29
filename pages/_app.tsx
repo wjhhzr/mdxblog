@@ -9,7 +9,8 @@ import { ThemeProvider } from 'styled-components'
 import Router from "next/router";
 import logger from "hui-weblog"
 import  'antd/lib/table/style/index.css'
-
+import  "antd/lib/message/style/index.css";
+import  "antd/lib/form/style/index.css";
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(()=>{
     const Logger = logger.init({
