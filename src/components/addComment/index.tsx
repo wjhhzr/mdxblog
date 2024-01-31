@@ -28,9 +28,10 @@ function AddComment({ id }: { setComments?: any; id: string }) {
     setLoading(true);
     const user = { ...userCache, name: name.value, email: email.value };
     await axios.post("/api/comments/add", {
-      content: content.value,
+      content: content,
       articleId: id,
-      ...user,
+      name,
+      email,
       date: dayjs()
     });
     // 保存用户
