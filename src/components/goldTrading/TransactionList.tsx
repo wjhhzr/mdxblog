@@ -190,7 +190,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({ transactions }
                   </TypeBadge>
                 </Td>
                 <Td>
-                  <AmountCell>{transaction.amount.toFixed(0)}</AmountCell>/
+                  <AmountCell>{transaction.amount.toFixed(0)}</AmountCell>{"/"}
                   <PriceCell>{transaction.price.toFixed(2)}</PriceCell>
                 </Td>
                 <Td>
