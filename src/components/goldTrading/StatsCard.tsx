@@ -11,13 +11,10 @@ interface StatsCardProps {
 
 const Card = styled.div`
   background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
   padding: 28px 32px 18px 32px;
   position: relative;
   min-width: 340px;
   max-width: 520px;
-  margin: 0 auto 32px auto;
 `;
 
 const TopRow = styled.div`

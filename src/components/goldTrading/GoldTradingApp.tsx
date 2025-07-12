@@ -15,16 +15,18 @@ import { log } from 'console';
 const Container = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   min-height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
 `;
 
 const Header = styled.div`
   text-align: center;
   margin-bottom: 40px;
-  padding: 30px 0;
+  padding: 0px 0;
 `;
 
 const HeaderTitle = styled.h1`
@@ -60,14 +62,9 @@ const Grid = styled.div`
 const Card = styled.div`
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
-  border-radius: 20px;
-  padding: 28px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  padding: 10px 10px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  &:not(:first-child){
-    margin-top: 10px
-  }
 `;
 
 const StatsGrid = styled.div`
@@ -83,7 +80,6 @@ const StatCard = styled.div<{ gradient: string }>`
   padding: 24px;
   border-radius: 20px;
   text-align: center;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
@@ -128,7 +124,6 @@ const DemoButton = styled.button`
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   margin-bottom: 24px;
-  box-shadow: 0 6px 20px rgba(255, 154, 158, 0.3);
 
   &:active {
     transform: translateY(0) scale(1);
@@ -137,7 +132,7 @@ const DemoButton = styled.button`
 
 const SectionTitle = styled.h2`
   color: #1a1a1a;
-  font-size: 1.8rem;
+  font-size: 18px;
   font-weight: 700;
   margin: 0 0 24px 0;
   display: flex;
@@ -177,7 +172,7 @@ export const GoldTradingApp: React.FC = () => {
   const [positions, setPositions] = useState<GoldPosition[]>([]);
   const [funnelType, setFunnelType] = useState<'custom' | 'echarts' | 'advanced'>('advanced');
   console.log("positions", positions);
-  
+
   // 计算总持仓
   const totalPosition = positions.reduce((sum, pos) => sum + pos.remainingAmount, 0);
 
@@ -196,7 +191,7 @@ export const GoldTradingApp: React.FC = () => {
     }, 0);
 
   // 计算平均买入价格
-  const avgBuyPrice = positions.length > 0 
+  const avgBuyPrice = positions.length > 0
     ? positions.reduce((sum, pos) => sum + pos.avgPrice * pos.remainingAmount, 0) / totalPosition
     : 0;
 
@@ -314,11 +309,11 @@ export const GoldTradingApp: React.FC = () => {
   useEffect(() => {
     const saved = localStorage.getItem('gold_transactions');
 
-    
+
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-    console.log("读取庶几乎", parsed );
+        console.log("读取庶几乎", parsed);
 
         if (Array.isArray(parsed)) {
           setTransactions(parsed.map(t => ({
@@ -326,7 +321,7 @@ export const GoldTradingApp: React.FC = () => {
             date: t.date ? new Date(t.date) : new Date(),
           })));
         }
-      } catch {}
+      } catch { }
     }
   }, []);
 
@@ -340,49 +335,40 @@ export const GoldTradingApp: React.FC = () => {
     updatePositions(transactions);
   }, [transactions]);
   console.log(positions);
-  
+
   return (
     <>
       <GlobalStyles />
       <Container>
-      <StatsCard 
-        // 总克数
-        totalWeight={totalPosition}
-        // 总买入价格
-        totalBuy={totalBuyPrice}
-        // 总收益
-        totalProfit={totalProfit}
-        // 均价
-        avgBuyPrice={avgBuyPrice}
-        profitRate={5}
-      />
-      <Grid>
+        <StatsCard
+          // 总克数
+          totalWeight={totalPosition}
+          // 总买入价格
+          totalBuy={totalBuyPrice}
+          // 总收益
+          totalProfit={totalProfit}
+          // 均价
+          avgBuyPrice={avgBuyPrice}
+          profitRate={5}
+        />
+        <Card>
+          <SectionTitle>📊 持仓漏斗图</SectionTitle>
+          {<FunnelChartAdvanced positions={positions} />}
+        </Card>
         <Card>
           <BuyForm onBuy={handleBuy} />
         </Card>
         <Card>
-          <SellForm 
-            onSell={handleSell} 
+          <SellForm
+            onSell={handleSell}
             positions={positions}
           />
         </Card>
-      </Grid>
-
-      <Card>
-        <SectionTitle>📊 持仓漏斗图</SectionTitle>
-        {<FunnelChartAdvanced positions={positions} />}
-      </Card>
-
-      {/* <Card>
-        <SectionTitle>📈 收益分析</SectionTitle>
-        <ProfitChart transactions={transactions} />
-      </Card> */}
-
-      <Card>
-        <SectionTitle>📋 交易记录</SectionTitle>
-        <TransactionList transactions={transactions} />
-      </Card>
-    </Container>
+        <Card>
+          <SectionTitle>📋 交易记录</SectionTitle>
+          <TransactionList transactions={transactions} />
+        </Card>
+      </Container>
     </>
   );
 }; 

@@ -4,7 +4,6 @@ import styled from 'styled-components';
 const Container = styled.div`
   max-height: 500px;
   overflow-y: auto;
-  border-radius: 16px;
   background: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -13,12 +12,12 @@ const Container = styled.div`
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.95rem;
+  font-size: 12px;
 `;
 
 const Th = styled.th`
   background: rgba(102, 126, 234, 0.1);
-  padding: 16px 20px;
+  padding: 5px;
   text-align: left;
   font-weight: 700;
   color: #1a1a1a;
@@ -30,7 +29,7 @@ const Th = styled.th`
 `;
 
 const Td = styled.td`
-  padding: 16px 20px;
+  padding: 5px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   vertical-align: middle;
   transition: background-color 0.2s;
@@ -45,32 +44,30 @@ const Tr = styled.tr`
 `;
 
 const TypeBadge = styled.span<{ type: 'buy' | 'sell' }>`
-  padding: 6px 12px;
+  border-radius: 20%;
+  padding: 2px 5px;
   border-radius: 20px;
-  font-size: 0.85rem;
+  font-size: 12px;
   font-weight: 700;
   background: ${props => props.type === 'buy' 
-    ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' 
+    ? "rgba(103, 126, 230)"
     : 'linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)'};
   color: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   display: inline-block;
-  min-width: 60px;
+  min-width: 40px;
   text-align: center;
 `;
 
 const ProfitBadge = styled.span<{ profit: number }>`
-  padding: 6px 12px;
+  padding: 2px 5px;
   border-radius: 20px;
-  font-size: 0.85rem;
+  font-size: 12px;
   font-weight: 700;
   background: ${props => props.profit >= 0 
     ? 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' 
     : 'linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)'};
   color: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   display: inline-block;
-  min-width: 80px;
   text-align: center;
 `;
 
@@ -79,7 +76,7 @@ const EmptyState = styled.div`
   padding: 80px 20px;
   color: #666;
   font-style: italic;
-  font-size: 1.1rem;
+  font-size: 12px;
   background: rgba(255, 255, 255, 0.5);
   border-radius: 16px;
   margin: 20px;
@@ -87,27 +84,28 @@ const EmptyState = styled.div`
 `;
 
 const DateCell = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+    position: relative;
+
 `;
 
 const DateText = styled.div`
   font-weight: 600;
   color: #1a1a1a;
+  position: relative;
+  font-size: 12px;
 `;
 
 const TimeText = styled.div`
-  font-size: 0.8rem;
+  font-size: 12px;
   color: #666;
 `;
 
-const AmountCell = styled.div`
+const AmountCell = styled.span`
   font-weight: 700;
   color: #1a1a1a;
 `;
 
-const PriceCell = styled.div`
+const PriceCell = styled.span`
   font-weight: 600;
   color: #333;
 `;
@@ -115,7 +113,7 @@ const PriceCell = styled.div`
 const TotalCell = styled.div`
   font-weight: 700;
   color: #1a1a1a;
-  font-size: 1.1rem;
+  font-size: 12px;
 `;
 
 interface Transaction {
@@ -163,9 +161,8 @@ export const TransactionList: React.FC<TransactionListProps> = ({ transactions }
           <tr>
             <Th>时间</Th>
             <Th>类型</Th>
-            <Th>数量 (g)</Th>
-            <Th>价格 (¥/g)</Th>
-            <Th>总金额 (¥)</Th>
+            <Th>交易价（克/元）</Th>
+            <Th>总金额</Th>
             <Th>收益 (¥)</Th>
           </tr>
         </thead>
@@ -178,19 +175,22 @@ export const TransactionList: React.FC<TransactionListProps> = ({ transactions }
               <Tr key={transaction.id}>
                 <Td>
                   <DateCell>
-                    <DateText>{transaction.date.toLocaleDateString()}</DateText>
-                    <TimeText>{transaction.date.toLocaleTimeString()}</TimeText>
+                    <DateText>
+                      {transaction.date.toLocaleDateString()}
+                    </DateText>
+                    {/* <TimeText>
+                      {transaction.date.toLocaleTimeString()}
+
+                    </TimeText> */}
                   </DateCell>
                 </Td>
                 <Td>
                   <TypeBadge type={transaction.type}>
-                    {transaction.type === 'buy' ? '买入' : '卖出'}
+                    {transaction.type === 'buy' ? '买' : '卖'}
                   </TypeBadge>
                 </Td>
                 <Td>
-                  <AmountCell>{transaction.amount.toFixed(2)}</AmountCell>
-                </Td>
-                <Td>
+                  <AmountCell>{transaction.amount.toFixed(0)}</AmountCell>/
                   <PriceCell>{transaction.price.toFixed(2)}</PriceCell>
                 </Td>
                 <Td>

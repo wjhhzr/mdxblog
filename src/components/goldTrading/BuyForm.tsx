@@ -4,13 +4,12 @@ import styled from 'styled-components';
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
 `;
 
 const Title = styled.h3`
-  margin: 0 0 24px 0;
   color: #1a1a1a;
-  font-size: 1.6rem;
+  font-size: 18px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -47,7 +46,6 @@ const Input = styled.input`
   &:focus {
     outline: none;
     border-color: #667eea;
-    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
     transform: translateY(-1px);
   }
 
@@ -66,7 +64,6 @@ const Button = styled.button`
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
   position: relative;
   overflow: hidden;
 
@@ -90,7 +87,6 @@ const Button = styled.button`
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 `;
 
@@ -110,7 +106,7 @@ const SummaryText = styled.div`
   font-weight: 500;
 `;
 
-const TotalAmount = styled.div`
+const TotalAmount = styled.span`
   font-size: 1.4rem;
   font-weight: 700;
   color: #1a1a1a;
@@ -129,9 +125,11 @@ const InputIcon = styled.span`
   color: #999;
   font-size: 1.1rem;
   pointer-events: none;
+  z-index: 1;
 `;
 
 const StyledInput = styled(Input)<{ hasIcon?: boolean }>`
+  width: 100%;
   padding-left: ${props => props.hasIcon ? '48px' : '20px'};
 `;
 
@@ -161,23 +159,7 @@ export const BuyForm: React.FC<BuyFormProps> = ({ onBuy }) => {
   return (
     <Form onSubmit={handleSubmit}>
       <Title>买入黄金</Title>
-      
-      <InputGroup>
-        <Label>数量 (克)</Label>
-        <InputWrapper>
-          <InputIcon>⚖️</InputIcon>
-          <StyledInput
-            type="number"
-            step="0.01"
-            min="0.01"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            placeholder="请输入购买数量"
-            required
-            hasIcon
-          />
-        </InputWrapper>
-      </InputGroup>
+    
 
       <InputGroup>
         <Label>价格 (元/克)</Label>
@@ -195,7 +177,22 @@ export const BuyForm: React.FC<BuyFormProps> = ({ onBuy }) => {
           />
         </InputWrapper>
       </InputGroup>
-
+      <InputGroup>
+        <Label>数量 (克)</Label>
+        <InputWrapper>
+          <InputIcon>⚖️</InputIcon>
+          <StyledInput
+            type="number"
+            step="0.01"
+            min="0.01"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="请输入购买数量"
+            required
+            hasIcon
+          />
+        </InputWrapper>
+      </InputGroup>
       {totalCost > 0 && (
         <Summary>
           <SummaryText>预计总金额</SummaryText>

@@ -198,7 +198,7 @@ export const FunnelChartECharts: React.FC<FunnelChartEChartsProps> = ({ position
   };
 
   return (
-    <div style={{ width: '100%', height: '500px' }}>
+    <div style={{ width: '100%', height: '500px', overflow: 'hidden' }}>
       <ReactECharts
         option={option}
         style={{ height: '100%', width: '100%' }}

@@ -7,11 +7,13 @@ const Form = styled.form`
   flex-direction: column;
   gap: 20px;
 `;
-
+const InputWrapper = styled.div`
+  position: relative;
+`;
 const Title = styled.h3`
-  margin: 0 0 24px 0;
+
   color: #1a1a1a;
-  font-size: 1.6rem;
+  font-size: 18px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -29,6 +31,18 @@ const InputGroup = styled.div`
   gap: 8px;
 `;
 
+const InputIcon = styled.span`
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 1.1rem;
+  pointer-events: none;
+  z-index: 1;
+`;
+
+
 const Label = styled.label`
   font-weight: 600;
   color: #333;
@@ -43,13 +57,11 @@ const Select = styled.select`
   font-size: 1rem;
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(10px);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 
   &:focus {
     outline: none;
     border-color: #ff6b6b;
-    box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1);
     transform: translateY(-1px);
   }
 `;
@@ -66,7 +78,6 @@ const Input = styled.input`
   &:focus {
     outline: none;
     border-color: #ff6b6b;
-    box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1);
     transform: translateY(-1px);
   }
 
@@ -74,7 +85,10 @@ const Input = styled.input`
     color: #999;
   }
 `;
-
+const StyledInput = styled(Input)<{ hasIcon?: boolean }>`
+  width: 100%;
+  padding-left: ${props => props.hasIcon ? '48px' : '20px'};
+`;
 const Button = styled.button`
   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
   color: white;
@@ -85,7 +99,6 @@ const Button = styled.button`
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 8px 24px rgba(255, 107, 107, 0.3);
   position: relative;
   overflow: hidden;
 
@@ -109,7 +122,6 @@ const Button = styled.button`
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 `;
 
@@ -232,23 +244,10 @@ export const SellForm: React.FC<SellFormProps> = ({ onSell, positions }) => {
       </InputGroup>
 
       <InputGroup>
-        <Label>卖出数量 (克)</Label>
-        <Input
-          type="number"
-          step="0.01"
-          min="0.01"
-          max={maxAmount}
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          placeholder="请输入卖出数量"
-          required
-        />
-        <MaxAmountHint>最大可卖出: {maxAmount}g</MaxAmountHint>
-      </InputGroup>
-
-      <InputGroup>
         <Label>卖出价格 (元/克)</Label>
-        <Input
+        <InputWrapper>
+          <InputIcon>💰</InputIcon>
+          <StyledInput
           type="number"
           step="0.01"
           min="0.01"
@@ -256,9 +255,28 @@ export const SellForm: React.FC<SellFormProps> = ({ onSell, positions }) => {
           onChange={(e) => setPrice(e.target.value)}
           placeholder="请输入卖出价格"
           required
-        />
+            hasIcon
+          />
+        </InputWrapper>
       </InputGroup>
-
+      <InputGroup>
+        <Label>卖出数量 (克)</Label>
+        <InputWrapper>
+          <InputIcon>⚖️</InputIcon>
+          <StyledInput
+            type="number"
+            step="0.01"
+            min="0.01"
+            max={maxAmount}
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="请输入卖出数量"
+            required
+            hasIcon
+          />
+        </InputWrapper>
+        <MaxAmountHint>最大可卖出: {maxAmount}g</MaxAmountHint>
+      </InputGroup>
       {selectedPos && totalRevenue > 0 && (
         <Summary>
           <SummaryRow>

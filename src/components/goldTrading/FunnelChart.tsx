@@ -37,7 +37,6 @@ const FunnelLevel = styled.div<{
   font-size: 1.1rem;
   position: relative;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 
   &::before {
@@ -63,7 +62,6 @@ const LevelInfo = styled.div`
   backdrop-filter: blur(20px);
   padding: 16px 20px;
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   font-size: 0.9rem;
   color: #333;
   white-space: nowrap;
@@ -119,7 +117,6 @@ const LegendItem = styled.div`
   padding: 12px 16px;
   border-radius: 12px;
   backdrop-filter: blur(10px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 `;
 
@@ -128,7 +125,6 @@ const LegendColor = styled.div<{ color: string }>`
   height: 20px;
   background: ${props => props.color};
   border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 `;
 
 const LegendText = styled.div`
@@ -174,7 +170,6 @@ const TotalValueCard = styled.div`
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border-radius: 20px;
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
   backdrop-filter: blur(20px);
 `;
 
